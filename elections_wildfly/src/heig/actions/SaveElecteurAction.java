@@ -1,5 +1,7 @@
 package heig.actions;
 
+import java.util.Calendar;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -50,6 +52,27 @@ public class SaveElecteurAction extends ActionSupport {
 		if ((electeur.getNom() == null) || (electeur.getNom().length() < 3)) {
 			addActionError(getText("nom.tropcourt"));
 		}
+		if ((electeur.getLocalite() == null) || (electeur.getLocalite().length() < 3)){
+			addActionError(getText("localite.vide"));
+		}
+		
+		Calendar cal = Calendar.getInstance();
+		System.out.println(cal.get(Calendar.YEAR));
+		cal.setLenient(false);
+		if (electeur.getDdn() != null){
+			try {
+				cal.setTime(electeur.getDdn());
+			    cal.getTime();
+			    
+			}
+			catch (Exception e) {
+			  addActionError(getText("date.formatincorrect"));
+			}
+			
+		} else {
+			addActionError(getText("date.formatincorrect"));
+		}
+
 	}
 
 }
