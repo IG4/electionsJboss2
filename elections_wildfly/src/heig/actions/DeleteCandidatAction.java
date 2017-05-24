@@ -6,6 +6,7 @@ import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -14,41 +15,31 @@ import heig.metier.entite.Electeur;
 import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
 
+@Results({ @Result(name = "success", type = "chain", location = "list-candidatss"),
+		@Result(name = "input", location = "page.list.candidats", type = "tiles") })
 @SuppressWarnings("serial")
-@Result(name = "success", location = "page.edit.electeurs", type = "tiles")
-public class EditElecteurAction extends ActionSupport implements ServletRequestAware {
-	private Electeur electeur;
-	private HttpServletRequest request;
+public class DeleteCandidatAction extends ActionSupport implements ServletRequestAware {
 
+	private HttpServletRequest request;
+	
 	public String execute() throws NamingException {
 		Context ctx = new InitialContext();
 		IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
-		String electeurId = request.getParameter("electeurId");
-		if (electeurId == null || "".equals(electeurId) || " ".equals(electeurId)) {
-			electeur = new Electeur();
+		String candidatId = request.getParameter("candidatId");
+		if (candidatId == null || "".equals(candidatId) || " ".equals(candidatId)) {
+			addActionError("CandidatId invalide : " + candidatId);
 		} else {
 			try {
-				electeur = elections.getElecteur(Integer.parseInt(electeurId));
-			} catch (NumberFormatException | PersistException e) {
-				addActionError("Une erreur s'est produite pendant le chargement de l'électeur avec id = " + electeurId);
+				elections.deleteElecteur(Electeur.class, Integer.parseInt(candidatId));
+			} catch (PersistException | NumberFormatException e) {
 				e.printStackTrace();
 			}
 		}
 		return SUCCESS;
 	}
 
-	public Electeur getElecteur() {
-		return electeur;
-	}
-
-	public void setElecteur(Electeur electeur) {
-		this.electeur = electeur;
-	}
-
 	@Override
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
-
 	}
-
 }

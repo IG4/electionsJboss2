@@ -10,30 +10,30 @@ import org.apache.struts2.convention.annotation.Result;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import heig.metier.entite.Electeur;
+import heig.metier.entite.Candidat;
 import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
 
 
 @SuppressWarnings("serial")
-@Result(name = "success", location = "page.list.electeurs", type = "tiles")
-public class ListElecteursAction extends ActionSupport {
+@Result(name = "success", location = "page.list.candidats", type = "tiles")
+public class ListCandidatsAction extends ActionSupport {
 
-	private List<Electeur> electeurs;
+	private List<Candidat> candidats;
 
-	public List<Electeur> getElecteurs() {
-		return electeurs;
+	public List<Candidat> getCandidats() {
+		return candidats;
 	}
 
-	public void setElecteurs(List<Electeur> electeurs) {
-		this.electeurs = electeurs;
+	public void setCandidats(List<Candidat> candidats) {
+		this.candidats = candidats;
 	}
 
 	public String execute() {
 		try {
 			Context ctx = new InitialContext();
 			IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
-			electeurs = elections.getElecteurs();
+			candidats = elections.getCandidats();
 		} catch (NamingException e1) {
 			e1.printStackTrace();
 		}

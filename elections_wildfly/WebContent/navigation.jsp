@@ -3,8 +3,10 @@
 <html>
 	<body>
 		<ul>
-			<li><a href="<s:url action="list-electeurs"/>"> Liste des électeurs</a></li>
-			<li><a href="<s:url action="edit-electeur"/>"> Ajout d'un électeur</a></li>
+			<li><a href="<s:url action="welcome-electeurs"/>"> Gérer les électeurs</a></li>
+			<li><a href="<s:url action="welcome-candidats"/>"> Gérer les candidats</a></li>
+			<li><a href="<s:url action="welcome-partis"/>"> Gérer les élections</a></li>
+			<li><a href="<s:url action="welcome-elections"/>"> Gérer les élections</a></li>
 		</ul>
 	</body>
 </html>

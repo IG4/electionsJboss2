@@ -9,22 +9,22 @@ import org.apache.struts2.convention.annotation.Results;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import heig.metier.entite.Electeur;
+import heig.metier.entite.Candidat;
 import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
 
-@Results({ @Result(name = "success", type = "chain", location = "list-electeurs"),
-		@Result(name = "input", location = "page.edit.electeurs", type = "tiles") })
+@Results({ @Result(name = "success", type = "chain", location = "list-candidats"),
+		@Result(name = "input", location = "page.edit.candidats", type = "tiles") })
 @SuppressWarnings("serial")
-public class SaveElecteurAction extends ActionSupport {
+public class SaveCandidatAction extends ActionSupport {
 
-	private Electeur electeur;
+	private Candidat candidat;
 
 	public String execute() {
 		try {
 			Context ctx = new InitialContext();
 			IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
-			elections.saveElecteur(electeur);
+			elections.saveCandidat(candidat);
 		} catch (PersistException e) {
 			e.printStackTrace();
 		} catch (NamingException e) {
@@ -34,20 +34,20 @@ public class SaveElecteurAction extends ActionSupport {
 
 	}
 
-	public Electeur getElecteur() {
-		return electeur;
+	public Candidat getCandidat() {
+		return candidat;
 	}
 
-	public void setElecteur(Electeur electeur) {
-		this.electeur = electeur;
+	public void setCandidat(Candidat candidat) {
+		this.candidat = candidat;
 	}
 
 	@Override
 	public void validate() {
-		if ((electeur.getPrenom() == null) || (electeur.getPrenom().length() < 3)) {
+		if ((candidat.getPrenom() == null) || (candidat.getPrenom().length() < 3)) {
 			addActionError(getText("prenom.tropcourt"));
 		}
-		if ((electeur.getNom() == null) || (electeur.getNom().length() < 3)) {
+		if ((candidat.getNom() == null) || (candidat.getNom().length() < 3)) {
 			addActionError(getText("nom.tropcourt"));
 		}
 	}

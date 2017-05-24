@@ -13,17 +13,46 @@
 	</definition>
 	
 	<definition name="page.welcome" extends="base.definition">
-		<put-attribute name="title" value="Welcome" />
+		<put-attribute name="title" value="Elections" />
 		<put-attribute name="body" value="/welcome.jsp" />
 	</definition>
 	
-	<definition name="page.list" extends="base.definition">
-		<put-attribute name="title" value="Liste des electeurs" />
+	<!-- Pages pour gérer les partis -->
+	<!-- Pages pour gérer les candidats -->
+	<definition name="page.welcome.candidats" extends="base.definition">
+		<put-attribute name="title" value="Candidats" />
+		<put-attribute name="navigation" value="/navigation-candidats.jsp" />
+		<put-attribute name="body" value="/welcome-candidats.jsp" />
+	</definition>
+	
+	<definition name="page.list.candidats" extends="base.definition">
+		<put-attribute name="title" value="Liste des candidats" />
+		<put-attribute name="navigation" value="/navigation-candidats.jsp" />
+		<put-attribute name="body" value="/list-candidats.jsp" />
+	</definition>	
+	
+	<definition name="page.edit.candidats" extends="base.definition">
+		<put-attribute name="title" value="Editions des candidats" />
+		<put-attribute name="navigation" value="/navigation-candidats.jsp" />
+		<put-attribute name="body" value="/edit-candidat.jsp" />
+	</definition>	
+	
+	<!-- Pages pour gérer les électeurs -->
+	<definition name="page.welcome.electeurs" extends="base.definition">
+		<put-attribute name="title" value="Elections" />
+		<put-attribute name="navigation" value="/navigation-electeurs.jsp" />
+		<put-attribute name="body" value="/welcome-electeurs.jsp" />
+	</definition>
+	
+	<definition name="page.list.electeurs" extends="base.definition">
+		<put-attribute name="title" value="Liste des électeurs" />
+		<put-attribute name="navigation" value="/navigation-electeurs.jsp" />
 		<put-attribute name="body" value="/list-electeurs.jsp" />
 	</definition>	
 	
-	<definition name="page.edit" extends="base.definition">
-		<put-attribute name="title" value="Editions des electeurs" />
+	<definition name="page.edit.electeurs" extends="base.definition">
+		<put-attribute name="title" value="Editions des électeurs" />
+		<put-attribute name="navigation" value="/navigation-electeurs.jsp" />
 		<put-attribute name="body" value="/edit-electeur.jsp" />
 	</definition>	
 	

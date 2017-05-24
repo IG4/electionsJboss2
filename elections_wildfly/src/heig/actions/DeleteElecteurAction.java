@@ -16,7 +16,7 @@ import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
 
 @Results({ @Result(name = "success", type = "chain", location = "list-electeurs"),
-		@Result(name = "input", location = "page.edit", type = "tiles") })
+		@Result(name = "input", location = "page.list.electeurs", type = "tiles") })
 @SuppressWarnings("serial")
 public class DeleteElecteurAction extends ActionSupport implements ServletRequestAware {
 

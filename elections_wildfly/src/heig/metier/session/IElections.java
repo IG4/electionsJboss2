@@ -24,10 +24,13 @@ public interface IElections {
 	
 	Parti getParti(Integer id) throws PersistException;
 	
+	@SuppressWarnings("rawtypes")
 	void deleteCandidat(Class clazz, Integer id) throws PersistException;
 	
+	@SuppressWarnings("rawtypes")
 	void deleteElecteur(Class clazz, Integer id) throws PersistException;
 	
+	@SuppressWarnings("rawtypes")
 	void deleteParti(Class clazz, Integer id) throws PersistException;
 	
 	void saveCandidat(Candidat toSave) throws PersistException;
