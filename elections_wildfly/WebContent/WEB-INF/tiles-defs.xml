@@ -24,17 +24,17 @@
 		<put-attribute name="body" value="/welcome-partis.jsp" />
 	</definition>
 	
-	<definition name="page.list.candidats" extends="base.definition">
-		<put-attribute name="title" value="Liste des candidats" />
-		<put-attribute name="navigation" value="/navigation-candidats.jsp" />
-		<put-attribute name="body" value="/list-candidats.jsp" />
-	</definition>	
+	<definition name="page.list.partis" extends="base.definition">
+		<put-attribute name="title" value="Liste des partis" />
+		<put-attribute name="navigation" value="/navigation-partis.jsp" />
+		<put-attribute name="body" value="/list-partis.jsp" />
+	</definition>
 	
-	<definition name="page.edit.candidats" extends="base.definition">
-		<put-attribute name="title" value="Editions des candidats" />
-		<put-attribute name="navigation" value="/navigation-candidats.jsp" />
-		<put-attribute name="body" value="/edit-candidat.jsp" />
-	</definition>	
+	<definition name="page.edit.partis" extends="base.definition">
+		<put-attribute name="title" value="Editions des partis" />
+		<put-attribute name="navigation" value="/navigation-partis.jsp" />
+		<put-attribute name="body" value="/edit-parti.jsp" />
+	</definition>
 	
 	<!-- Pages pour gérer les candidats -->
 	<definition name="page.welcome.candidats" extends="base.definition">

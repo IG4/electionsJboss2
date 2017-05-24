@@ -6,40 +6,49 @@ import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import heig.metier.entite.Candidat;
+import heig.metier.entite.Parti;
 import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
 
-@Results({ @Result(name = "success", type = "chain", location = "list-candidats"),
-		@Result(name = "input", location = "page.list.candidats", type = "tiles") })
 @SuppressWarnings("serial")
-public class DeleteCandidatAction extends ActionSupport implements ServletRequestAware {
-
+@Result(name = "success", location = "page.edit.partis", type = "tiles")
+public class EditPartiAction extends ActionSupport implements ServletRequestAware {
+	private Parti parti;
 	private HttpServletRequest request;
-	
+
 	public String execute() throws NamingException {
 		Context ctx = new InitialContext();
 		IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
-		String candidatId = request.getParameter("candidatId");
-		if (candidatId == null || "".equals(candidatId) || " ".equals(candidatId)) {
-			addActionError("CandidatId invalide : " + candidatId);
+		String partiId = request.getParameter("partiId");
+		if (partiId == null || "".equals(partiId) || " ".equals(partiId)) {
+			parti = new Parti();
 		} else {
 			try {
-				elections.deleteCandidat(Candidat.class, Integer.parseInt(candidatId));
-			} catch (PersistException | NumberFormatException e) {
+				parti = elections.getParti(Integer.parseInt(partiId));
+			} catch (NumberFormatException | PersistException e) {
+				addActionError("Une erreur s'est produite pendant le chargement du parti avec id = " + partiId);
 				e.printStackTrace();
 			}
 		}
 		return SUCCESS;
 	}
 
+	public Parti getParti() {
+		return parti;
+	}
+
+	public void setParti(Parti parti) {
+		this.parti = parti;
+	}
+
 	@Override
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
+
 	}
+
 }

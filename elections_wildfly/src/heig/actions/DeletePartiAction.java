@@ -11,26 +11,26 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import heig.metier.entite.Candidat;
+import heig.metier.entite.Parti;
 import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
 
-@Results({ @Result(name = "success", type = "chain", location = "list-candidats"),
-		@Result(name = "input", location = "page.list.candidats", type = "tiles") })
+@Results({ @Result(name = "success", type = "chain", location = "list-partis"),
+		@Result(name = "input", location = "page.list.partis", type = "tiles") })
 @SuppressWarnings("serial")
-public class DeleteCandidatAction extends ActionSupport implements ServletRequestAware {
+public class DeletePartiAction extends ActionSupport implements ServletRequestAware {
 
 	private HttpServletRequest request;
 	
 	public String execute() throws NamingException {
 		Context ctx = new InitialContext();
 		IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
-		String candidatId = request.getParameter("candidatId");
-		if (candidatId == null || "".equals(candidatId) || " ".equals(candidatId)) {
-			addActionError("CandidatId invalide : " + candidatId);
+		String partiId = request.getParameter("partiId");
+		if (partiId == null || "".equals(partiId) || " ".equals(partiId)) {
+			addActionError("partiId invalide : " + partiId);
 		} else {
 			try {
-				elections.deleteCandidat(Candidat.class, Integer.parseInt(candidatId));
+				elections.deleteParti(Parti.class, Integer.parseInt(partiId));
 			} catch (PersistException | NumberFormatException e) {
 				e.printStackTrace();
 			}
