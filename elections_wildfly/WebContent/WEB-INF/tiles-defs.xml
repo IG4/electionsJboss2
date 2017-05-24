@@ -18,6 +18,24 @@
 	</definition>
 	
 	<!-- Pages pour gérer les partis -->
+	<definition name="page.welcome.partis" extends="base.definition">
+		<put-attribute name="title" value="Partis" />
+		<put-attribute name="navigation" value="/navigation-partis.jsp" />
+		<put-attribute name="body" value="/welcome-partis.jsp" />
+	</definition>
+	
+	<definition name="page.list.candidats" extends="base.definition">
+		<put-attribute name="title" value="Liste des candidats" />
+		<put-attribute name="navigation" value="/navigation-candidats.jsp" />
+		<put-attribute name="body" value="/list-candidats.jsp" />
+	</definition>	
+	
+	<definition name="page.edit.candidats" extends="base.definition">
+		<put-attribute name="title" value="Editions des candidats" />
+		<put-attribute name="navigation" value="/navigation-candidats.jsp" />
+		<put-attribute name="body" value="/edit-candidat.jsp" />
+	</definition>	
+	
 	<!-- Pages pour gérer les candidats -->
 	<definition name="page.welcome.candidats" extends="base.definition">
 		<put-attribute name="title" value="Candidats" />
