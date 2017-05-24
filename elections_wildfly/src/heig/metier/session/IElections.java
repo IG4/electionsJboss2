@@ -24,11 +24,11 @@ public interface IElections {
 	
 	Parti getParti(Integer id) throws PersistException;
 	
-	void deleteCandidat(Candidat toDelete) throws PersistException;
+	void deleteCandidat(Class clazz, Integer id) throws PersistException;
 	
-	void deleteElecteur(Electeur toDelete) throws PersistException;
+	void deleteElecteur(Class clazz, Integer id) throws PersistException;
 	
-	void deleteParti(Parti toDelete) throws PersistException;
+	void deleteParti(Class clazz, Integer id) throws PersistException;
 	
 	void saveCandidat(Candidat toSave) throws PersistException;
 	

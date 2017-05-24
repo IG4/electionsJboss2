@@ -14,7 +14,7 @@ import heig.metier.entite.Parti;
 import heig.metier.exceptions.PersistException;
 
 @Stateless
-public class Elections implements IElections {
+public class ElectionsBean implements IElections {
 
 	@PersistenceContext
 	private EntityManager em;
@@ -44,16 +44,17 @@ public class Elections implements IElections {
 	/**
 	 * Deletes the given {@code persistable} from database.
 	 * 
-	 * @param persistable
 	 * @throws PersistException
 	 */
-	private void delete(IPersistable persistable) throws PersistException {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void delete(Class clazz, Integer id) throws PersistException {
 		try {
-			if (persistable != null) {
-				em.remove(persistable);
+			if (id != null) {
+				
+				em.remove(em.find(clazz, id));
 			}
 			else {
-				throw new PersistException(persistable + " invalide : null");
+				throw new PersistException(String.valueOf(id) + " invalide : null");
 			}
 		}
 		catch (PersistenceException e) {
@@ -139,19 +140,22 @@ public class Elections implements IElections {
 		return (Parti) getPersistable(Parti.class, id);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public void deleteCandidat(Candidat toDelete) throws PersistException {
-		delete(toDelete);
+	public void deleteCandidat(Class clazz, Integer id) throws PersistException {
+		delete(clazz, id);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public void deleteElecteur(Electeur toDelete) throws PersistException {
-		delete(toDelete);
+	public void deleteElecteur(Class clazz, Integer id) throws PersistException {
+		delete(clazz, id);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public void deleteParti(Parti toDelete) throws PersistException {
-		delete(toDelete);
+	public void deleteParti(Class clazz, Integer id) throws PersistException {
+		delete(clazz, id);
 	}
 
 	@Override
