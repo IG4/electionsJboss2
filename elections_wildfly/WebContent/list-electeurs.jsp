@@ -7,6 +7,8 @@
 			<tr>
 				<td><s:property value="prenom" /></td>
 				<td><s:property value="nom" /></td>
+				<td><s:property value="ddn" /></td>
+				<td><s:property value="localite" /></td>
 				<td>
 					<s:url action="edit-electeur" var="urlText">
 						<s:param name="electeurId">
