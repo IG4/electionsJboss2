@@ -1,4 +1,4 @@
-package heig.metier;
+package heig.metier.entite;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -9,12 +9,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Electeur implements Serializable {
+public class Electeur implements Serializable, IPersistable {
 	private static final long serialVersionUID = 1L;
 	
 
 @Id @GeneratedValue
-	private int id;
+	private Integer id;
 	@Column(length=20)
 	private String nom;
 	@Column(length=20)
@@ -29,7 +29,7 @@ public class Electeur implements Serializable {
 		id = 0;
 	}
 
-	public Electeur(int id, String nom, String prenom, Date ddn, String localite) {
+	public Electeur(Integer id, String nom, String prenom, Date ddn, String localite) {
 		this.id = id;
 		this.nom = nom;
 		this.prenom = prenom;
@@ -37,11 +37,11 @@ public class Electeur implements Serializable {
 		this.localite = localite;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

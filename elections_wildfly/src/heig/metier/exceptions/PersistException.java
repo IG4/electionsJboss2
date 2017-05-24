@@ -1,4 +1,4 @@
-package heig.metier;
+package heig.metier.exceptions;
 
 @SuppressWarnings("serial")
 public class PersistException extends Exception {
