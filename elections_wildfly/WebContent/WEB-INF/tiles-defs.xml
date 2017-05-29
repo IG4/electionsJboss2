@@ -57,7 +57,7 @@
 	
 	<!-- Pages pour gérer les électeurs -->
 	<definition name="page.welcome.electeurs" extends="base.definition">
-		<put-attribute name="title" value="Elections" />
+		<put-attribute name="title" value="Electeurs" />
 		<put-attribute name="navigation" value="/navigation-electeurs.jsp" />
 		<put-attribute name="body" value="/welcome-electeurs.jsp" />
 	</definition>
@@ -72,6 +72,25 @@
 		<put-attribute name="title" value="Editions des électeurs" />
 		<put-attribute name="navigation" value="/navigation-electeurs.jsp" />
 		<put-attribute name="body" value="/edit-electeur.jsp" />
+	</definition>
+
+	<!-- Pages pour gérer les élections -->
+	<definition name="page.welcome.elections" extends="base.definition">
+		<put-attribute name="title" value="Elections" />
+		<put-attribute name="navigation" value="/navigation-elections.jsp" />
+		<put-attribute name="body" value="/welcome-elections.jsp" />
+	</definition>
+	
+	<definition name="page.list.elections" extends="base.definition">
+		<put-attribute name="title" value="Liste des élections" />
+		<put-attribute name="navigation" value="/navigation-elections.jsp" />
+		<put-attribute name="body" value="/list-elections.jsp" />
 	</definition>	
+	
+	<definition name="page.edit.elections" extends="base.definition">
+		<put-attribute name="title" value="Editions des élections" />
+		<put-attribute name="navigation" value="/navigation-elections.jsp" />
+		<put-attribute name="body" value="/edit-election.jsp" />
+	</definition>
 	
 </tiles-definitions>

@@ -6,6 +6,7 @@ import javax.ejb.Local;
 
 import heig.metier.entite.Candidat;
 import heig.metier.entite.Electeur;
+import heig.metier.entite.Election;
 import heig.metier.entite.Parti;
 import heig.metier.exceptions.PersistException;
 
@@ -16,11 +17,15 @@ public interface IElections {
 	
 	List<Electeur> getElecteurs() throws PersistException;
 	
+	List<Election> getElections() throws PersistException;
+	
 	List<Parti> getPartis() throws PersistException;
 	
 	Candidat getCandidat(Integer id) throws PersistException;
 	
 	Electeur getElecteur(Integer id) throws PersistException;
+	
+	Election getElection(Integer id) throws PersistException;
 	
 	Parti getParti(Integer id) throws PersistException;
 	
@@ -31,11 +36,16 @@ public interface IElections {
 	void deleteElecteur(Class clazz, Integer id) throws PersistException;
 	
 	@SuppressWarnings("rawtypes")
+	void deleteElection(Class clazz, Integer id) throws PersistException;
+	
+	@SuppressWarnings("rawtypes")
 	void deleteParti(Class clazz, Integer id) throws PersistException;
 	
 	void saveCandidat(Candidat toSave) throws PersistException;
 	
 	void saveElecteur(Electeur toSave) throws PersistException;
+	
+	void saveElection(Election toSave) throws PersistException;
 	
 	void saveParti(Parti toSave) throws PersistException;
 	

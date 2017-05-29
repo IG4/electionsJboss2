@@ -9,6 +9,7 @@ import javax.persistence.PersistenceException;
 
 import heig.metier.entite.Candidat;
 import heig.metier.entite.Electeur;
+import heig.metier.entite.Election;
 import heig.metier.entite.IPersistable;
 import heig.metier.entite.Parti;
 import heig.metier.exceptions.PersistException;
@@ -115,6 +116,18 @@ public class ElectionsBean implements IElections {
 
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<Election> getElections() throws PersistException {
+		try {
+			return em.createQuery("Select e FROM Election e").getResultList();
+		}
+		catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new PersistenceException("getElections()", e);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<Parti> getPartis() throws PersistException {
 		try {
 			return em.createQuery("Select p FROM Parti p").getResultList();
@@ -134,7 +147,12 @@ public class ElectionsBean implements IElections {
 	public Electeur getElecteur(Integer id) throws PersistException {
 		return (Electeur) getPersistable(Electeur.class, id);
 	}
-
+	
+	@Override
+	public Election getElection(Integer id) throws PersistException {
+		return (Election) getPersistable(Election.class, id);
+	}
+	
 	@Override
 	public Parti getParti(Integer id) throws PersistException {
 		return (Parti) getPersistable(Parti.class, id);
@@ -154,6 +172,12 @@ public class ElectionsBean implements IElections {
 
 	@SuppressWarnings("rawtypes")
 	@Override
+	public void deleteElection(Class clazz, Integer id) throws PersistException {
+		delete(clazz, id);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
 	public void deleteParti(Class clazz, Integer id) throws PersistException {
 		delete(clazz, id);
 	}
@@ -169,7 +193,13 @@ public class ElectionsBean implements IElections {
 	}
 
 	@Override
+	public void saveElection(Election toSave) throws PersistException {
+		saveOrUpdate(toSave);
+	}
+	
+	@Override
 	public void saveParti(Parti toSave) throws PersistException {
 		saveOrUpdate(toSave);
 	}
+
 }

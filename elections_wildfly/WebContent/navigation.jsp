@@ -6,6 +6,7 @@
 			<li><a href="<s:url action="welcome-electeurs"/>"> Gérer les électeurs</a></li>
 			<li><a href="<s:url action="welcome-candidats"/>"> Gérer les candidats</a></li>
 			<li><a href="<s:url action="welcome-partis"/>"> Gérer les partis</a></li>
+			<li><a href="<s:url action="welcome-elections"/>"> Gérer les élections</a></li>
 		</ul>
 	</body>
 </html>
