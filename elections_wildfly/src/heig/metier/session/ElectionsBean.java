@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -113,6 +114,10 @@ public class ElectionsBean implements IElections {
 			saveOrUpdate(new Candidat(null, "Morand", "Toto", new Date(sdf.parse("23/09/1957").getTime()), "Lausanne", "Parti de rien"));
 			saveOrUpdate(new Candidat(null, "Brélaz", "Daniel", new Date(sdf.parse("14/02/1962").getTime()), "Lausanne", "Les Verts"));
 			saveOrUpdate(new Candidat(null, "Germond", "Florence", new Date(sdf.parse("14/02/1962").getTime()), "Lausanne", "Les Verts"));
+			
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.DAY_OF_YEAR, 10);
+			saveOrUpdate(new Election(null, "Test", "MD45", new Date(new java.util.Date().getTime()), new Date(cal.getTimeInMillis())));
 		} catch (PersistException | ParseException e) {
 			e.printStackTrace();
 		}
