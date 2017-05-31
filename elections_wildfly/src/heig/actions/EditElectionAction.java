@@ -1,7 +1,5 @@
 package heig.actions;
 
-import java.util.List;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -12,7 +10,6 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import heig.metier.entite.Electeur;
 import heig.metier.entite.Election;
 import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;

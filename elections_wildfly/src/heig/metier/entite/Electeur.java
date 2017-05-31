@@ -13,7 +13,7 @@ public class Electeur implements Serializable, IPersistable {
 	private static final long serialVersionUID = 1L;
 	
 
-@Id @GeneratedValue
+	@Id @GeneratedValue
 	private Integer id;
 	@Column(length=20)
 	private String nom;

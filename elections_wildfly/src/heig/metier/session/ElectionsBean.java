@@ -1,7 +1,12 @@
 package heig.metier.session;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -87,6 +92,29 @@ public class ElectionsBean implements IElections {
 		catch (PersistenceException e) {
 			e.printStackTrace();
 			throw new PersistenceException("saveOrUpdate()", e);
+		}
+	}
+	
+	@PostConstruct
+	public void init() {
+		/**
+		 * Ppoulate db with some ppl
+		 */
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		
+		try {
+			saveOrUpdate(new Electeur(null, "Doe", "John", new Date(sdf.parse("12/05/1982").getTime()), "Lausanne"));
+			saveOrUpdate(new Electeur(null, "Doe", "Jane", new Date(sdf.parse("14/07/1984").getTime()), "Lausanne"));
+			saveOrUpdate(new Electeur(null, "Hendrix", "Jimmy", new Date(sdf.parse("07/11/1944").getTime()), "Montreux"));
+			saveOrUpdate(new Electeur(null, "Mercury", "Freddy", new Date(sdf.parse("07/11/1944").getTime()), "Montreux"));
+			saveOrUpdate(new Electeur(null, "Marley", "Bob", new Date(sdf.parse("18/04/1947").getTime()), "Zürich"));
+			saveOrUpdate(new Electeur(null, "Goldmann", "Jean-Jacques", new Date(sdf.parse("09/12/1953").getTime()), "Genève"));
+			
+			saveOrUpdate(new Candidat(null, "Morand", "Toto", new Date(sdf.parse("23/09/1957").getTime()), "Lausanne", "Parti de rien"));
+			saveOrUpdate(new Candidat(null, "Brélaz", "Daniel", new Date(sdf.parse("14/02/1962").getTime()), "Lausanne", "Les Verts"));
+			saveOrUpdate(new Candidat(null, "Germond", "Florence", new Date(sdf.parse("14/02/1962").getTime()), "Lausanne", "Les Verts"));
+		} catch (PersistException | ParseException e) {
+			e.printStackTrace();
 		}
 	}
 	

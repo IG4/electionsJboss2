@@ -8,13 +8,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Election implements Serializable, IPersistable {
 	private static final long serialVersionUID = 1L;
 	
 
-@Id @GeneratedValue
+	@Id @GeneratedValue
 	private Integer id;
 	@Column(length=20)
 	private String nom;
@@ -25,8 +27,12 @@ public class Election implements Serializable, IPersistable {
 	@Column()
 	private Date fin;
 	
+	@OneToMany
+	@JoinColumn(name="id", referencedColumnName="id")
 	private List<Electeur> electeurs;
 	
+	@OneToMany
+	@JoinColumn(name="id", referencedColumnName="id")
 	private List<Candidat> candidats;
 	
 
