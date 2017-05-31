@@ -2,6 +2,7 @@ package heig.metier.entite;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +24,11 @@ public class Election implements Serializable, IPersistable {
 	private Date debut;
 	@Column()
 	private Date fin;
+	
+	private List<Electeur> electeurs;
+	
+	private List<Candidat> candidats;
+	
 
 	public Election() {
 		super();
@@ -75,6 +81,22 @@ public class Election implements Serializable, IPersistable {
 
 	public void setFin(Date fin) {
 		this.fin = fin;
+	}
+
+	public List<Electeur> getElecteurs() {
+		return electeurs;
+	}
+
+	public void setElecteurs(List<Electeur> electeurs) {
+		this.electeurs = electeurs;
+	}
+
+	public List<Candidat> getCandidats() {
+		return candidats;
+	}
+
+	public void setCandidats(List<Candidat> candidats) {
+		this.candidats = candidats;
 	}
 
 }
