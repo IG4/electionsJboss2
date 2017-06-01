@@ -35,6 +35,10 @@ public class Election implements Serializable, IPersistable {
 	@JoinColumn(name="id", referencedColumnName="id")
 	private List<Candidat> candidats;
 	
+	@OneToMany
+	@JoinColumn(name="id", referencedColumnName="id")
+	private List<Vote> votes;
+	
 
 	public Election() {
 		super();
@@ -105,4 +109,13 @@ public class Election implements Serializable, IPersistable {
 		this.candidats = candidats;
 	}
 
+	public List<Vote> getVotes() {
+		return votes;
+	}
+
+	public void setVotes(List<Vote> votes) {
+		this.votes = votes;
+	}
+
+	
 }

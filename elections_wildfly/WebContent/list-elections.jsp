@@ -25,6 +25,14 @@
 					</s:url> 
 					<a href="<s:property value="urlText" />">supprimer</a>
 				</td>
+				<td>
+					<s:url action="add-vote" var="urlText">
+						<s:param name="electionId">
+							<s:property value="id" />
+						</s:param>
+					</s:url> 
+					<a href="<s:property value="urlText" />">Ajouter vote</a>
+				</td>
 			</tr>
 		</s:iterator>
 	</table>

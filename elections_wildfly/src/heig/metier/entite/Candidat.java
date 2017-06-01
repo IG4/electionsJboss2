@@ -87,6 +87,8 @@ public class Candidat implements Serializable, IPersistable {
 	public void setParti(String parti) {
 		this.parti = parti;
 	}
-
 	
+	public String toString(){
+		return nom + " " + prenom;
+	}	
 }
