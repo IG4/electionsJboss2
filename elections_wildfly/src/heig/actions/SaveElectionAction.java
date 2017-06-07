@@ -16,7 +16,7 @@ import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
 
 @Results({ @Result(name = "success", type = "chain", location = "list-elections"),
-		@Result(name = "input", location = "page.edit.elections", type = "tiles") })
+		@Result(name = "input", location = "page.list.elections", type = "tiles") })
 @SuppressWarnings("serial")
 public class SaveElectionAction extends ActionSupport {
 
