@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
@@ -76,6 +78,7 @@ public class ElectionsBean implements IElections {
 	 * @param persistable
 	 * @throws PersistException
 	 */
+	@TransactionAttribute(value=TransactionAttributeType.REQUIRES_NEW)
 	private void saveOrUpdate(IPersistable persistable) throws PersistException {
 		try {
 			if (persistable != null) {
@@ -117,7 +120,15 @@ public class ElectionsBean implements IElections {
 			
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.DAY_OF_YEAR, 10);
-			saveOrUpdate(new Election(null, "Test", "MD45", new Date(new java.util.Date().getTime()), new Date(cal.getTimeInMillis())));
+			
+			Election election = new Election(null, "Test", "MD45", new Date(new java.util.Date().getTime()), new Date(cal.getTimeInMillis()));
+			List<Candidat> candidatsDispo = getCandidats();
+			election.getCandidats().add(candidatsDispo.get(0));
+			election.getCandidats().add(candidatsDispo.get(1));
+			List<Electeur> electeursDispo = getElecteurs();
+			election.getElecteurs().add(electeursDispo.get(0));
+			election.getElecteurs().add(electeursDispo.get(1));
+			saveOrUpdate(election);
 		} catch (PersistException | ParseException e) {
 			e.printStackTrace();
 		}
@@ -183,7 +194,10 @@ public class ElectionsBean implements IElections {
 	
 	@Override
 	public Election getElection(Integer id) throws PersistException {
-		return (Election) getPersistable(Election.class, id);
+		Election result = (Election) getPersistable(Election.class, id);
+		System.out.println("electeurs : " + result.getElecteurs().size());
+		System.out.println("candidats : " + result.getCandidats().size());
+		return result;
 	}
 	
 	@Override

@@ -10,6 +10,8 @@
 			<s:textfield type="date" label="Date de fin" name="election.fin"/>
 			<s:select label="Candidats" name="candidatids" list="election.candidats" listKey="id" listValue="NomComplet" multiple="true" size="election.candidats.length()" />
 			<s:select label="Electeurs" name="electeurids" list="election.electeurs" listKey="id" listValue="NomComplet" multiple="true" size="election.electeurs.length()" />
+			<s:select label="CandidatsDispo" name="candidatdispoids" list="candidatsDispo" listKey="id" listValue="NomComplet" multiple="true" size="candidatsDispo.length()" />
+			<s:select label="ElecteursDispo" name="electeurdispoids" list="electeursDispo" listKey="id" listValue="NomComplet" multiple="true" size="electeursDispo.length()" />
 			<s:submit key="submit" name="submit"/>
 		</s:form>
 	</body>

@@ -15,6 +15,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import com.opensymphony.xwork2.ActionSupport;
 
 import heig.metier.entite.Candidat;
+import heig.metier.entite.Electeur;
 import heig.metier.entite.Election;
 import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
@@ -23,6 +24,9 @@ import heig.metier.session.IElections;
 @Result(name = "success", location = "page.edit.elections", type = "tiles")
 public class EditElectionAction extends ActionSupport implements ServletRequestAware {
 	private Election election;
+	private List<Electeur> electeursDispo;
+	private List<Candidat> candidatsDispo;
+	
 	private HttpServletRequest request;
 
 	public String execute() throws NamingException {
@@ -33,12 +37,21 @@ public class EditElectionAction extends ActionSupport implements ServletRequestA
 		try {
 			if (electionId == null || "".equals(electionId) || " ".equals(electionId)) {
 				election = new Election();
-				election.setCandidats(elections.getCandidats());
-				election.setElecteurs(elections.getElecteurs());
 			} else {
 				election = elections.getElection(Integer.parseInt(electionId));
-				election.setCandidats(elections.getCandidats());
-				election.setElecteurs(elections.getElecteurs());
+			}
+			
+			electeursDispo = elections.getElecteurs();
+			if (!electeursDispo.isEmpty()) {
+				for (Electeur el : election.getElecteurs()) {
+					electeursDispo.remove(el);
+				}
+			}
+			candidatsDispo = elections.getCandidats();
+			if (!candidatsDispo.isEmpty()) {
+				for (Candidat cd : election.getCandidats()) {
+					candidatsDispo.remove(cd);
+				}
 			}
 		} catch (NumberFormatException | PersistException e) {
 			addActionError("Une erreur s'est produite pendant le chargement de l'�lection avec id = " + electionId);
@@ -59,6 +72,22 @@ public class EditElectionAction extends ActionSupport implements ServletRequestA
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
 
+	}
+
+	public List<Electeur> getElecteursDispo() {
+		return electeursDispo;
+	}
+
+	public void setElecteursDispo(List<Electeur> electeursDispo) {
+		this.electeursDispo = electeursDispo;
+	}
+
+	public List<Candidat> getCandidatsDispo() {
+		return candidatsDispo;
+	}
+
+	public void setCandidatsDispo(List<Candidat> candidatsDispo) {
+		this.candidatsDispo = candidatsDispo;
 	}
 	
 

@@ -2,14 +2,14 @@ package heig.metier.entite;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Election implements Serializable, IPersistable {
@@ -27,16 +27,13 @@ public class Election implements Serializable, IPersistable {
 	@Column()
 	private Date fin;
 	
-	@OneToMany
-	@JoinColumn(name="id", referencedColumnName="id")
+	@ManyToMany
 	private List<Electeur> electeurs;
 	
-	@OneToMany
-	@JoinColumn(name="id", referencedColumnName="id")
+	@ManyToMany
 	private List<Candidat> candidats;
 	
-	@OneToMany
-	@JoinColumn(name="id", referencedColumnName="id")
+	@ManyToMany
 	private List<Vote> votes;
 	
 
@@ -94,6 +91,9 @@ public class Election implements Serializable, IPersistable {
 	}
 
 	public List<Electeur> getElecteurs() {
+		if (electeurs == null) {
+			electeurs = new ArrayList<Electeur>();
+		}
 		return electeurs;
 	}
 
@@ -102,6 +102,9 @@ public class Election implements Serializable, IPersistable {
 	}
 
 	public List<Candidat> getCandidats() {
+		if (candidats == null) {
+			candidats = new ArrayList<Candidat>();
+		}
 		return candidats;
 	}
 
@@ -110,11 +113,47 @@ public class Election implements Serializable, IPersistable {
 	}
 
 	public List<Vote> getVotes() {
+		if (votes == null) {
+			votes = new ArrayList<Vote>();
+		}
 		return votes;
 	}
 
 	public void setVotes(List<Vote> votes) {
 		this.votes = votes;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((candidats == null) ? 0 : candidats.hashCode());
+		result = prime * result + ((code == null) ? 0 : code.hashCode());
+		result = prime * result + ((debut == null) ? 0 : debut.hashCode());
+		result = prime * result + ((electeurs == null) ? 0 : electeurs.hashCode());
+		result = prime * result + ((fin == null) ? 0 : fin.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((nom == null) ? 0 : nom.hashCode());
+		result = prime * result + ((votes == null) ? 0 : votes.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Election other = (Election) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+
+		return true;
 	}
 
 	
