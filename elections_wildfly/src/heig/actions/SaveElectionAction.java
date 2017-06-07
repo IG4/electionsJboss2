@@ -1,6 +1,7 @@
 package heig.actions;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -11,6 +12,7 @@ import org.apache.struts2.convention.annotation.Results;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import heig.metier.entite.Candidat;
 import heig.metier.entite.Election;
 import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
@@ -21,6 +23,8 @@ import heig.metier.session.IElections;
 public class SaveElectionAction extends ActionSupport {
 
 	private Election election;
+	
+	private List<Candidat> candidatsSelectionnes;
 
 	public String execute() {
 		try {
@@ -46,19 +50,28 @@ public class SaveElectionAction extends ActionSupport {
 
 	@Override
 	public void validate() {
-		if ((election.getCode() == null) || (election.getCode().length() < 3)) {
-			addActionError(getText("prenom.tropcourt"));
-		}
-		if ((election.getNom() == null) || (election.getNom().length() < 3)) {
-			addActionError(getText("nom.tropcourt"));
-		}
-		if ((election.getDebut() == null) || (election.getDebut().before(new Date()))) {
-			addActionError(getText("debut.invalide"));
-		}
+//		if ((election.getCode() == null) || (election.getCode().length() < 3)) {
+//			addActionError(getText("prenom.tropcourt"));
+//		}
+//		if ((election.getNom() == null) || (election.getNom().length() < 3)) {
+//			addActionError(getText("nom.tropcourt"));
+//		}
+//		if ((election.getDebut() == null) || (election.getDebut().before(new Date()))) {
+//			addActionError(getText("debut.invalide"));
+//		}
+//
+//		if ((election.getFin() == null) || (election.getFin().before(new Date()))) {
+//			addActionError(getText("fin.invalide"));
+//		}
+		System.out.println("https://stackoverflow.com/questions/20634878/multi-select-drop-down-in-struts2");
+	}
 
-		if ((election.getFin() == null) || (election.getFin().before(new Date()))) {
-			addActionError(getText("fin.invalide"));
-		}
+	public List<Candidat> getCandidatsSelectionnes() {
+		return candidatsSelectionnes;
+	}
+
+	public void setCandidatsSelectionnes(List<Candidat> candidatsSelectionnes) {
+		this.candidatsSelectionnes = candidatsSelectionnes;
 	}
 
 }
