@@ -8,8 +8,8 @@
 			<s:textfield label="Nom" name="election.nom"/>
 			<s:textfield type="date" label="Date de début" name="election.debut"/>
 			<s:textfield type="date" label="Date de fin" name="election.fin"/>
-			<s:select label="Candidats" name="candidatids" list="election.candidats" listKey="id" listValue="nom" multiple="true" size="5" />
-			<s:select label="Electeurs" name="electeurids" list="election.candidats" listKey="id" listValue="nom" multiple="true" size="5" />
+			<s:select label="Candidats" name="candidatids" list="election.candidats" listKey="id" listValue="NomComplet" multiple="true" size="election.candidats.length()" />
+			<s:select label="Electeurs" name="electeurids" list="election.electeurs" listKey="id" listValue="NomComplet" multiple="true" size="election.electeurs.length()" />
 			<s:submit key="submit" name="submit"/>
 		</s:form>
 	</body>

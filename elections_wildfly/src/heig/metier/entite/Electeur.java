@@ -40,6 +40,10 @@ public class Electeur implements Serializable, IPersistable {
 	public Integer getId() {
 		return id;
 	}
+	
+	public String getIdSt(){
+		return id.toString();
+	}
 
 	public void setId(Integer id) {
 		this.id = id;
@@ -55,6 +59,10 @@ public class Electeur implements Serializable, IPersistable {
 
 	public String getPrenom() {
 		return prenom;
+	}
+	
+	public String getNomComplet() {
+		return nom + " "+prenom;
 	}
 
 	public void setPrenom(String prenom) {

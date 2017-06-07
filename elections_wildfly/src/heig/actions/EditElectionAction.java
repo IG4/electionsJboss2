@@ -34,6 +34,7 @@ public class EditElectionAction extends ActionSupport implements ServletRequestA
 			if (electionId == null || "".equals(electionId) || " ".equals(electionId)) {
 				election = new Election();
 				election.setCandidats(elections.getCandidats());
+				election.setElecteurs(elections.getElecteurs());
 			} else {
 				election = elections.getElection(Integer.parseInt(electionId));
 				election.setCandidats(elections.getCandidats());

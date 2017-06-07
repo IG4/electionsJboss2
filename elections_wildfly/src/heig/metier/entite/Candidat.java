@@ -91,4 +91,8 @@ public class Candidat implements Serializable, IPersistable {
 	public String toString(){
 		return nom + " " + prenom;
 	}	
+	
+	public String getNomComplet(){
+		return nom + " " + prenom;
+	}
 }
