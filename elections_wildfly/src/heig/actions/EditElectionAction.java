@@ -1,5 +1,9 @@
 package heig.actions;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -10,6 +14,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import heig.metier.entite.Candidat;
 import heig.metier.entite.Election;
 import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
@@ -28,13 +33,14 @@ public class EditElectionAction extends ActionSupport implements ServletRequestA
 		try {
 			if (electionId == null || "".equals(electionId) || " ".equals(electionId)) {
 				election = new Election();
+				election.setCandidats(elections.getCandidats());
 			} else {
 				election = elections.getElection(Integer.parseInt(electionId));
 				election.setCandidats(elections.getCandidats());
 				election.setElecteurs(elections.getElecteurs());
 			}
 		} catch (NumberFormatException | PersistException e) {
-			addActionError("Une erreur s'est produite pendant le chargement de l'élection avec id = " + electionId);
+			addActionError("Une erreur s'est produite pendant le chargement de l'ï¿½lection avec id = " + electionId);
 			e.printStackTrace();
 		}
 		return SUCCESS;
@@ -53,5 +59,7 @@ public class EditElectionAction extends ActionSupport implements ServletRequestA
 		this.request = request;
 
 	}
+	
+
 
 }
