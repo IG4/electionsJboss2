@@ -2,11 +2,15 @@ package heig.metier.entite;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Parti implements Serializable, IPersistable {
@@ -19,10 +23,11 @@ public class Parti implements Serializable, IPersistable {
 	private Date ddf;
 	@Column(length=30)
 	private String localite;
+	@OneToMany(mappedBy="parti", cascade=CascadeType.ALL, orphanRemoval=false)
+	private List<Candidat> candidats;
 	
 	public Parti() {
 		super();
-		id = 0;
 	}
 	
 	public Parti(Integer id, String nom, Date ddf, String localite){
@@ -64,6 +69,27 @@ public class Parti implements Serializable, IPersistable {
 		this.localite = localite;
 	}
 
+	public List<Candidat> getCandidats() {
+		if (candidats == null) {
+			candidats = new ArrayList<Candidat>();
+		}
+		return candidats;
+	}
+
+	public void setCandidats(List<Candidat> candidats) {
+		this.candidats = candidats;
+	}
+
+	public void addCandidat(Candidat c) {
+		c.setParti(this);
+		getCandidats().add(c);
+	}
+	
+	public void removeCandidat(Candidat c) {
+		getCandidats().remove(c);
+		c.setParti(null);
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -92,6 +118,4 @@ public class Parti implements Serializable, IPersistable {
 
 		return true;
 	}
-
-	
 }

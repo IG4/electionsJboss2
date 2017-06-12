@@ -24,14 +24,13 @@ public class SavePartiAction extends ActionSupport {
 		try {
 			Context ctx = new InitialContext();
 			IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
-			elections.saveParti(parti);
+			elections.save(parti);
 		} catch (PersistException e) {
 			e.printStackTrace();
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
 		return SUCCESS;
-
 	}
 
 	public Parti getParti() {

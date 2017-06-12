@@ -8,13 +8,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Candidat implements Serializable, IPersistable {
 	private static final long serialVersionUID = 1L;
 
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	private Integer id;
 	@Column(length=20)
 	private String nom;
@@ -24,23 +27,22 @@ public class Candidat implements Serializable, IPersistable {
 	private Date ddn;
 	@Column(length=30)
 	private String localite;
-	@Column(length=30)
-	private String parti;
+	@ManyToOne
+	@JoinColumn(name="parti_id")
+	private Parti parti;
 	@ManyToMany(mappedBy="candidats")
 	private List<Election> elections;
 	
 	public Candidat() {
 		super();
-		id = 0;
 	}
 	
-	public Candidat(Integer id, String nom, String prenom, Date ddn, String localite, String parti) {
+	public Candidat(Integer id, String nom, String prenom, Date ddn, String localite) {
 		this.id = id;
 		this.nom = nom;
 		this.prenom = prenom;
 		this.ddn = ddn;
 		this.localite = localite;
-		this.parti = parti;
 	}
 
 	public Integer getId() {
@@ -83,11 +85,11 @@ public class Candidat implements Serializable, IPersistable {
 		this.localite = localite;
 	}
 
-	public String getParti() {
+	public Parti getParti() {
 		return parti;
 	}
 
-	public void setParti(String parti) {
+	public void setParti(Parti parti) {
 		this.parti = parti;
 	}
 	

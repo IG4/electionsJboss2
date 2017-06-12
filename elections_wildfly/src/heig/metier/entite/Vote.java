@@ -1,27 +1,29 @@
 package heig.metier.entite;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Vote implements Serializable, IPersistable {
 	private static final long serialVersionUID = 1L;
 	
-
-@Id @GeneratedValue
+	@Id @GeneratedValue
 	private Integer id;
-	@Column(length=20)
+	@OneToOne
+	@JoinColumn(name="candidat_id")
 	private Candidat candidat;
-	@Column(length=20)
+	@OneToOne
+	@JoinColumn(name="electeur_id")
 	private Electeur electeur;
-	@ManyToMany(mappedBy="votes")
-	private List<Election> elections;
+	@ManyToOne
+	@JoinColumn(name="election_id")
+	private Election election;
 	
 	public Vote() {
 		super();
@@ -58,12 +60,15 @@ public class Vote implements Serializable, IPersistable {
 		this.electeur = electeur;
 	}
 
-	public List<Election> getElections() {
-		return elections;
+	public Election getElection() {
+		if (election == null) {
+			election = new Election();
+		}
+		return election;
 	}
 
-	public void setElections(List<Election> elections) {
-		this.elections = elections;
+	public void setElection(Election election) {
+		this.election = election;
 	}
 
 	@Override
@@ -72,7 +77,7 @@ public class Vote implements Serializable, IPersistable {
 		int result = 1;
 		result = prime * result + ((candidat == null) ? 0 : candidat.hashCode());
 		result = prime * result + ((electeur == null) ? 0 : electeur.hashCode());
-		result = prime * result + ((elections == null) ? 0 : elections.hashCode());
+		result = prime * result + ((election == null) ? 0 : election.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}

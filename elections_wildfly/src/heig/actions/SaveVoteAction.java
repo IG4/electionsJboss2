@@ -1,7 +1,5 @@
 package heig.actions;
 
-import java.util.Date;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -11,22 +9,24 @@ import org.apache.struts2.convention.annotation.Results;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import heig.metier.entite.Election;
+import heig.metier.entite.Vote;
 import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
 
 @Results({ @Result(name = "success", type = "chain", location = "list-elections"),
-		@Result(name = "input", location = "page.edit.elections", type = "tiles") })
+		@Result(name = "input", location = "page.list.elections", type = "tiles") })
 @SuppressWarnings("serial")
 public class SaveVoteAction extends ActionSupport {
 
-	private Election election;
+	private Vote vote;
 
 	public String execute() {
 		try {
 			Context ctx = new InitialContext();
+			vote = (Vote) ctx.lookup("Vote");
 			IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
-			elections.saveElection(election);
+			elections.save(vote);
+			ctx.unbind("Vote");
 		} catch (PersistException e) {
 			e.printStackTrace();
 		} catch (NamingException e) {
@@ -36,31 +36,31 @@ public class SaveVoteAction extends ActionSupport {
 
 	}
 
-	public Election getElection() {
-		return election;
+	public Vote getVote() {
+		return vote;
 	}
 
-	public void setElection(Election election) {
-		this.election = election;
+	public void setVote(Vote vote) {
+		this.vote = vote;
 	}
 
 	@Override
 	public void validate() {
-		if ((election.getCode() == null) || (election.getCode().length() < 3)) {
-			addActionError(getText("prenom.tropcourt"));
+		try {
+			Context ctx = new InitialContext();
+			vote = (Vote) ctx.lookup("Vote");
+			if (vote.getCandidat() == null) {
+				addActionError("candidat.invalide");
+			}
+			if (vote.getElecteur() == null) {
+				addActionError("electeur.invalide");
+			}
+			if (vote.getElection() == null) {
+				addActionError("election.invalide");
+			}
+		} catch (NamingException e) {
+			e.printStackTrace();
 		}
-		if ((election.getNom() == null) || (election.getNom().length() < 3)) {
-			addActionError(getText("nom.tropcourt"));
-		}
-		if ((election.getDebut() == null) || (election.getDebut().before(new Date()))) {
-			addActionError(getText("debut.invalide"));
-		}
-
-		if ((election.getFin() == null) || (election.getFin().before(new Date()))) {
-			addActionError(getText("fin.invalide"));
-		}
-		
-		
 	}
 
 }

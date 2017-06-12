@@ -52,7 +52,7 @@ public class SaveElectionAction extends ActionSupport {
 				toSave.setFin(election.getFin());
 				toSave.setNom(election.getNom());
 			}
-			elections.saveElection(toSave);
+			elections.save(toSave);
 		} catch (PersistException e) {
 			addActionError("Une erreur s'est produite lors de la persistance : " + e.getMessage());
 			e.printStackTrace();

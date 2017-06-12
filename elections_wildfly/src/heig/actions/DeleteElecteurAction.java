@@ -30,7 +30,7 @@ public class DeleteElecteurAction extends ActionSupport implements ServletReques
 			addActionError("ElecteurId invalide : " + electeurId);
 		} else {
 			try {
-				elections.deleteElecteur(Electeur.class, Integer.parseInt(electeurId));
+				elections.delete(Electeur.class, Integer.parseInt(electeurId));
 			} catch (PersistException | NumberFormatException e) {
 				e.printStackTrace();
 			}

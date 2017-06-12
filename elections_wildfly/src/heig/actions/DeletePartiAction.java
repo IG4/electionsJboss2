@@ -30,7 +30,7 @@ public class DeletePartiAction extends ActionSupport implements ServletRequestAw
 			addActionError("partiId invalide : " + partiId);
 		} else {
 			try {
-				elections.deleteParti(Parti.class, Integer.parseInt(partiId));
+				elections.delete(Parti.class, Integer.parseInt(partiId));
 			} catch (PersistException | NumberFormatException e) {
 				e.printStackTrace();
 			}

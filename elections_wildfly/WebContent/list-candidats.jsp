@@ -9,6 +9,7 @@
 				<td><s:property value="nom" /></td>
 				<td><s:property value="ddn" /></td>
 				<td><s:property value="localite" /></td>
+				<td><s:property value="parti.nom" /></td>
 				<td>
 					<s:url action="edit-candidat" var="urlText">
 						<s:param name="candidatId">

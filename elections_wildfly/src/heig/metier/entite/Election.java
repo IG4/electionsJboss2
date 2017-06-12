@@ -5,11 +5,13 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Election implements Serializable, IPersistable {
@@ -33,7 +35,7 @@ public class Election implements Serializable, IPersistable {
 	@ManyToMany
 	private List<Candidat> candidats;
 	
-	@ManyToMany
+	@OneToMany(mappedBy="election", cascade=CascadeType.ALL, orphanRemoval=true)
 	private List<Vote> votes;
 	
 
@@ -123,6 +125,28 @@ public class Election implements Serializable, IPersistable {
 		this.votes = votes;
 	}
 
+	public Electeur getElecteur(Integer id) {
+		if (id != null) {
+			for (Electeur el : getElecteurs()) {
+				if (id.equals(el.getId())) {
+					return el;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public Candidat getCandidat(Integer id) {
+		if (id != null) {
+			for (Candidat cd : getCandidats()) {
+				if (id.equals(cd.getId())) {
+					return cd;
+				}
+			}
+		}
+		return null;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

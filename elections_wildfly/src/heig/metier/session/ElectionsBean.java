@@ -49,54 +49,6 @@ public class ElectionsBean implements IElections {
 			throw new PersistenceException("getPersistable()", e);
 		}
 	}
-	/**
-	 * Deletes the given {@code persistable} from database.
-	 * 
-	 * @throws PersistException
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void delete(Class clazz, Integer id) throws PersistException {
-		try {
-			if (id != null) {
-				
-				em.remove(em.find(clazz, id));
-			}
-			else {
-				throw new PersistException(String.valueOf(id) + " invalide : null");
-			}
-		}
-		catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new PersistenceException("delete()", e);
-		}
-	}
-	/**
-	 * Insert ({@code id==null}) or update ({@code id!=null}) the given 
-	 * {@code persistable} in database.
-	 * 
-	 * @param persistable
-	 * @throws PersistException
-	 */
-	@TransactionAttribute(value=TransactionAttributeType.REQUIRES_NEW)
-	private void saveOrUpdate(IPersistable persistable) throws PersistException {
-		try {
-			if (persistable != null) {
-				if (persistable.getId() != null) {
-					em.merge(persistable);
-				}
-				else {
-					em.persist(persistable);
-				}
-			}
-			else {
-				throw new PersistException(persistable + " invalide : null");
-			}
-		}
-		catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new PersistenceException("saveOrUpdate()", e);
-		}
-	}
 	
 	@PostConstruct
 	public void init() {
@@ -106,16 +58,18 @@ public class ElectionsBean implements IElections {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		
 		try {
-			saveOrUpdate(new Electeur(null, "Doe", "John", new Date(sdf.parse("12/05/1982").getTime()), "Lausanne"));
-			saveOrUpdate(new Electeur(null, "Doe", "Jane", new Date(sdf.parse("14/07/1984").getTime()), "Lausanne"));
-			saveOrUpdate(new Electeur(null, "Hendrix", "Jimmy", new Date(sdf.parse("07/11/1944").getTime()), "Montreux"));
-			saveOrUpdate(new Electeur(null, "Mercury", "Freddy", new Date(sdf.parse("07/11/1944").getTime()), "Montreux"));
-			saveOrUpdate(new Electeur(null, "Marley", "Bob", new Date(sdf.parse("18/04/1947").getTime()), "Zürich"));
-			saveOrUpdate(new Electeur(null, "Goldmann", "Jean-Jacques", new Date(sdf.parse("09/12/1953").getTime()), "Genève"));
+			save(new Electeur(null, "Doe", "John", new Date(sdf.parse("12/05/1982").getTime()), "Lausanne"));
+			save(new Electeur(null, "Doe", "Jane", new Date(sdf.parse("14/07/1984").getTime()), "Lausanne"));
+			save(new Electeur(null, "Hendrix", "Jimmy", new Date(sdf.parse("07/11/1944").getTime()), "Montreux"));
+			save(new Electeur(null, "Mercury", "Freddy", new Date(sdf.parse("07/11/1944").getTime()), "Montreux"));
+			save(new Electeur(null, "Marley", "Bob", new Date(sdf.parse("18/04/1947").getTime()), "Zürich"));
+			save(new Electeur(null, "Goldmann", "Jean-Jacques", new Date(sdf.parse("09/12/1953").getTime()), "Genève"));
 			
-			saveOrUpdate(new Candidat(null, "Morand", "Toto", new Date(sdf.parse("23/09/1957").getTime()), "Lausanne", "Parti de rien"));
-			saveOrUpdate(new Candidat(null, "Brélaz", "Daniel", new Date(sdf.parse("14/02/1962").getTime()), "Lausanne", "Les Verts"));
-			saveOrUpdate(new Candidat(null, "Germond", "Florence", new Date(sdf.parse("14/02/1962").getTime()), "Lausanne", "Les Verts"));
+			save(new Candidat(null, "Leuthard", "Doris", new Date(sdf.parse("21/04/1969").getTime()), "Araau"));
+			save(new Candidat(null, "Broulis", "Pascal", new Date(sdf.parse("03/10/1967").getTime()), "Lausanne"));
+			save(new Candidat(null, "Morand", "Toto", new Date(sdf.parse("23/09/1957").getTime()), "Lausanne"));
+			save(new Candidat(null, "Brélaz", "Daniel", new Date(sdf.parse("14/02/1962").getTime()), "Lausanne"));
+			save(new Candidat(null, "Germond", "Florence", new Date(sdf.parse("14/02/1962").getTime()), "Lausanne"));
 			
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.DAY_OF_YEAR, 10);
@@ -127,7 +81,20 @@ public class ElectionsBean implements IElections {
 			List<Electeur> electeursDispo = getElecteurs();
 			election.getElecteurs().add(electeursDispo.get(0));
 			election.getElecteurs().add(electeursDispo.get(1));
-			saveOrUpdate(election);
+			save(election);
+			
+			candidatsDispo = getCandidats();
+			Parti parti = new Parti(null, "PDC", new Date(sdf.parse("12/09/1902").getTime()), "Bern");
+			parti.addCandidat(candidatsDispo.get(0));
+			save(parti);
+			
+			parti = new Parti(null, "PLR", new Date(sdf.parse("07/02/1904").getTime()), "Basel");
+			parti.addCandidat(candidatsDispo.get(1));
+			save(parti);
+			
+			parti = new Parti(null, "Parti de rien", new Date(sdf.parse("05/03/2012").getTime()), "Lausanne");
+			parti.addCandidat(candidatsDispo.get(2));
+			save(parti);
 		} catch (PersistException | ParseException e) {
 			e.printStackTrace();
 		}
@@ -196,56 +163,53 @@ public class ElectionsBean implements IElections {
 		Election result = (Election) getPersistable(Election.class, id);
 		System.out.println("electeurs : " + result.getElecteurs().size());
 		System.out.println("candidats : " + result.getCandidats().size());
+		System.out.println("votes : " + result.getVotes().size());
 		return result;
 	}
 	
 	@Override
 	public Parti getParti(Integer id) throws PersistException {
-		return (Parti) getPersistable(Parti.class, id);
+		Parti result = (Parti) getPersistable(Parti.class, id);
+		System.out.println("candidats : " + result.getCandidats().size());
+		return result;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@TransactionAttribute(value=TransactionAttributeType.REQUIRES_NEW)
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void deleteCandidat(Class clazz, Integer id) throws PersistException {
-		delete(clazz, id);
+	public void delete(Class clazz, Integer id) throws PersistException {
+		try {
+			if (id != null) {
+				em.remove(em.find(clazz, id));
+			}
+			else {
+				throw new PersistException(clazz.getName() + " avec id invalide : null");
+			}
+		}
+		catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new PersistenceException("delete() : " + clazz.getName() + " avec id = " + String.valueOf(id), e);
+		}
 	}
 
-	@SuppressWarnings("rawtypes")
+	@TransactionAttribute(value=TransactionAttributeType.REQUIRES_NEW)
 	@Override
-	public void deleteElecteur(Class clazz, Integer id) throws PersistException {
-		delete(clazz, id);
-	}
+	public void save(IPersistable toSave) throws PersistException {
+		try {
+			if (toSave == null) {
+				throw new PersistException(toSave + " invalide : null");
+			}
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void deleteElection(Class clazz, Integer id) throws PersistException {
-		delete(clazz, id);
+			if (toSave.getId() != null) {
+				em.merge(toSave);
+			}
+			else {
+				em.persist(toSave);
+			}
+		}
+		catch (PersistenceException e) {
+			e.printStackTrace();
+			throw new PersistenceException("save()", e);
+		}
 	}
-	
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void deleteParti(Class clazz, Integer id) throws PersistException {
-		delete(clazz, id);
-	}
-
-	@Override
-	public void saveCandidat(Candidat toSave) throws PersistException {
-		saveOrUpdate(toSave);
-	}
-
-	@Override
-	public void saveElecteur(Electeur toSave) throws PersistException {
-		saveOrUpdate(toSave);
-	}
-
-	@Override
-	public void saveElection(Election toSave) throws PersistException {
-		saveOrUpdate(toSave);
-	}
-	
-	@Override
-	public void saveParti(Parti toSave) throws PersistException {
-		saveOrUpdate(toSave);
-	}
-
 }
