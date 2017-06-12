@@ -86,7 +86,13 @@
 		<put-attribute name="navigation" value="/navigation-elections.jsp" />
 		<put-attribute name="body" value="/list-elections.jsp" />
 	</definition>	
-	
+
+	<definition name="page.add.elections" extends="base.definition">
+		<put-attribute name="title" value="Ajouter une élection" />
+		<put-attribute name="navigation" value="/navigation-elections.jsp" />
+		<put-attribute name="body" value="/add-election.jsp" />
+	</definition>
+		
 	<definition name="page.edit.elections" extends="base.definition">
 		<put-attribute name="title" value="Editions des élections" />
 		<put-attribute name="navigation" value="/navigation-elections.jsp" />

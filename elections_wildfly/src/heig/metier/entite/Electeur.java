@@ -2,6 +2,7 @@ package heig.metier.entite;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -30,7 +31,7 @@ public class Electeur implements Serializable, IPersistable {
 	
 	public Electeur() {
 		super();
-		id = 0;
+		this.elections = new ArrayList<Election>();
 	}
 
 	public Electeur(Integer id, String nom, String prenom, Date ddn, String localite) {
