@@ -19,15 +19,17 @@ import heig.metier.session.IElections;
 public class SaveCandidatAction extends ActionSupport {
 
 	private Candidat candidat;
-
+	
 	public String execute() {
 		try {
 			Context ctx = new InitialContext();
 			IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
 			elections.save(candidat);
 		} catch (PersistException e) {
+			addActionError("Une erreur de persistance est survenue : " + e.getMessage()); 
 			e.printStackTrace();
 		} catch (NamingException e) {
+			addActionError("Une erreur de persistance est survenue : " + e.getMessage()); 
 			e.printStackTrace();
 		}
 		return SUCCESS;
@@ -49,6 +51,15 @@ public class SaveCandidatAction extends ActionSupport {
 		}
 		if ((candidat.getNom() == null) || (candidat.getNom().length() < 3)) {
 			addActionError(getText("nom.tropcourt"));
+		}
+		try {
+			Context ctx = new InitialContext();
+			IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
+			if (!elections.checkDate(candidat.getDdn())) {
+				addActionError(getText("date.formatincorrect"));
+			}
+		} catch (NamingException e1) {
+			addActionError("Impossible de valider la date");
 		}
 	}
 

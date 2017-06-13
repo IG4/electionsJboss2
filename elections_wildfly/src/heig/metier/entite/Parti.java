@@ -19,7 +19,6 @@ public class Parti implements Serializable, IPersistable {
 	private Integer id;
 	@Column(length=20)
 	private String nom;
-	@Column(length=30)
 	private Date ddf;
 	@Column(length=30)
 	private String localite;

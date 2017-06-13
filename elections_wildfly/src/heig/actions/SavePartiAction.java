@@ -46,6 +46,19 @@ public class SavePartiAction extends ActionSupport {
 		if ((parti.getNom() == null) || (parti.getNom().length() < 3)) {
 			addActionError(getText("nom.tropcourt"));
 		}
+		if ((parti.getLocalite() == null) || (parti.getLocalite().length() < 3)){
+			addActionError(getText("localite.vide"));
+		}
+		
+		try {
+			Context ctx = new InitialContext();
+			IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
+			if (!elections.checkDate(parti.getDdf())) {
+				addActionError(getText("date.formatincorrect"));
+			}
+		} catch (NamingException e1) {
+			addActionError("Impossible de valider la date");
+		}
 	}
 
 }

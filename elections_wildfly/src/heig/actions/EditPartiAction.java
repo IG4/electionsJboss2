@@ -41,20 +41,11 @@ public class EditPartiAction extends ActionSupport implements ServletRequestAwar
 	}
 	
 	private List<Candidat> filterCandidats(List<Candidat> base, Parti parti) {
-		if (parti == null || parti.getCandidats().isEmpty()) {
-			return base;
-		}
 		List<Candidat> result = new ArrayList<Candidat>();
-		if (base == null || base.isEmpty()) {
-			return result;
-		}
 		for (Candidat ct : base) {
-			if (ct.getParti() == null) {
-				if (!parti.getCandidats().contains(ct)) {
-					result.add(ct);
-				}
+			if (ct.getParti() == null && !parti.getCandidats().contains(ct)) {
+				result.add(ct);
 			}
-
 		}
 		return result;
 	}
@@ -71,12 +62,7 @@ public class EditPartiAction extends ActionSupport implements ServletRequestAwar
 			} else if (removeCandidatId != null && !removeCandidatId.isEmpty()) {
 				partiId = manageCandidats(false, removeCandidatId, request.getParameter("removeCandidatPartiId"), elections);
 			}
-			
-			if (partiId == null || "".equals(partiId) || " ".equals(partiId)) {
-				parti = new Parti();
-			} else {
-				parti = elections.getParti(Integer.parseInt(partiId));
-			}
+			parti = elections.getParti(Integer.parseInt(partiId));
 			// unaffected candidates filtering
 			candidats = filterCandidats(elections.getCandidats(), parti);
 		} catch (NumberFormatException | PersistException e) {

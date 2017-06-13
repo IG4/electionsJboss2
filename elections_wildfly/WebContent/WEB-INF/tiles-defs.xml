@@ -29,6 +29,12 @@
 		<put-attribute name="navigation" value="/navigation-partis.jsp" />
 		<put-attribute name="body" value="/list-partis.jsp" />
 	</definition>
+
+	<definition name="page.add.partis" extends="base.definition">
+		<put-attribute name="title" value="Ajouter un parti" />
+		<put-attribute name="navigation" value="/navigation-partis.jsp" />
+		<put-attribute name="body" value="/add-parti.jsp" />
+	</definition>
 	
 	<definition name="page.edit.partis" extends="base.definition">
 		<put-attribute name="title" value="Editions des partis" />

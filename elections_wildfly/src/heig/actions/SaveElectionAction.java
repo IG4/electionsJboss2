@@ -80,11 +80,21 @@ public class SaveElectionAction extends ActionSupport {
 		if ((election.getNom() == null) || (election.getNom().length() < 3)) {
 			addActionError(getText("nom.tropcourt"));
 		}
-		if ((election.getDebut() == null) || isBeforeNow(election.getDebut(), new Date(Calendar.getInstance().getTimeInMillis()))) {
-			addActionError(getText("debut.invalide"));
-		}
-		if ((election.getFin() == null) || isBeforeNow(election.getFin(), new Date(Calendar.getInstance().getTimeInMillis()))) {
-			addActionError(getText("fin.invalide"));
+		try {
+			Context ctx = new InitialContext();
+			IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
+			if ((election.getDebut() == null) || 
+					isBeforeNow(election.getDebut(), new Date(Calendar.getInstance().getTimeInMillis())) || 
+					!elections.checkDate(election.getDebut())) {
+				addActionError(getText("debut.invalide"));
+			}
+			if ((election.getFin() == null) || 
+					isBeforeNow(election.getFin(), new Date(Calendar.getInstance().getTimeInMillis())) || 
+					!elections.checkDate(election.getFin())) {
+				addActionError(getText("fin.invalide"));
+			}
+		} catch (NamingException e1) {
+			addActionError("Impossible de valider la date");
 		}
 	}
 

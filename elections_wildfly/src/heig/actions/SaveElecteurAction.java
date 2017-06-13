@@ -1,7 +1,5 @@
 package heig.actions;
 
-import java.util.Calendar;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -56,23 +54,15 @@ public class SaveElecteurAction extends ActionSupport {
 			addActionError(getText("localite.vide"));
 		}
 		
-		Calendar cal = Calendar.getInstance();
-		System.out.println(cal.get(Calendar.YEAR));
-		cal.setLenient(false);
-		if (electeur.getDdn() != null){
-			try {
-				cal.setTime(electeur.getDdn());
-			    cal.getTime();
-			    
+		try {
+			Context ctx = new InitialContext();
+			IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
+			if (!elections.checkDate(electeur.getDdn())) {
+				addActionError(getText("date.formatincorrect"));
 			}
-			catch (Exception e) {
-			  addActionError(getText("date.formatincorrect"));
-			}
-			
-		} else {
-			addActionError(getText("date.formatincorrect"));
+		} catch (NamingException e1) {
+			addActionError("Impossible de valider la date");
 		}
-
 	}
 
 }

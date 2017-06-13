@@ -22,7 +22,6 @@ public class Electeur implements Serializable, IPersistable {
 	private String nom;
 	@Column(length=20)
 	private String prenom;
-	@Column(length=30)
 	private Date ddn;
 	@Column(length=30)
 	private String localite;

@@ -1,5 +1,6 @@
 package heig.metier.session;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -14,6 +15,8 @@ import heig.metier.exceptions.PersistException;
 @Local
 public interface IElections {
 
+	Boolean checkDate(Date toCheck);
+	
 	List<Candidat> getCandidats() throws PersistException;
 	
 	List<Electeur> getElecteurs() throws PersistException;

@@ -150,7 +150,11 @@ public class ElectionsBean implements IElections {
 
 	@Override
 	public Candidat getCandidat(Integer id) throws PersistException {
-		return (Candidat) getPersistable(Candidat.class, id);
+		Candidat result = (Candidat) getPersistable(Candidat.class, id);
+		if (result.getParti() != null) {
+			System.out.println("candidat avec parti : " + result.getParti() != null ? result.getParti().getNom() : "null");
+		}
+		return result;
 	}
 
 	@Override
@@ -161,16 +165,16 @@ public class ElectionsBean implements IElections {
 	@Override
 	public Election getElection(Integer id) throws PersistException {
 		Election result = (Election) getPersistable(Election.class, id);
-		System.out.println("electeurs : " + result.getElecteurs().size());
-		System.out.println("candidats : " + result.getCandidats().size());
-		System.out.println("votes : " + result.getVotes().size());
+		System.out.println("election avec electeurs : " + result.getElecteurs().size());
+		System.out.println("election avec candidats : " + result.getCandidats().size());
+		System.out.println("election avec votes : " + result.getVotes().size());
 		return result;
 	}
 	
 	@Override
 	public Parti getParti(Integer id) throws PersistException {
 		Parti result = (Parti) getPersistable(Parti.class, id);
-		System.out.println("candidats : " + result.getCandidats().size());
+		System.out.println("parti avec candidats : " + result.getCandidats().size());
 		return result;
 	}
 
@@ -211,5 +215,39 @@ public class ElectionsBean implements IElections {
 			e.printStackTrace();
 			throw new PersistenceException("save()", e);
 		}
+	}
+
+	@Override
+	public Boolean checkDate(Date toCheck) {
+		if (toCheck == null) {
+			return Boolean.FALSE;
+		}
+		Boolean result = Boolean.TRUE;
+		Calendar cal = Calendar.getInstance();
+		System.out.println(cal.get(Calendar.YEAR));
+		cal.setLenient(false);
+		try {
+			cal.setTime(toCheck);
+		    cal.getTime();
+		    
+		}
+		catch (Exception e) {
+		  result = Boolean.FALSE;
+		}
+		if (result) {
+			try { // check mysql date limitations : https://dev.mysql.com/doc/refman/5.6/en/datetime.html
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+				Calendar min = Calendar.getInstance();
+				min.setTime(new Date(sdf.parse("01/01/1000").getTime()));
+				Calendar max = Calendar.getInstance();
+				max.setTime(new Date(sdf.parse("31/12/9999").getTime()));
+				if (toCheck.before(min.getTime()) || toCheck.after(max.getTime())) {
+					result = Boolean.FALSE;
+				}
+			} catch (ParseException e) {
+				result = Boolean.FALSE;
+			}
+		}
+		return result;
 	}
 }

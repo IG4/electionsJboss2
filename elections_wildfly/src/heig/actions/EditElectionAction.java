@@ -110,8 +110,6 @@ public class EditElectionAction extends ActionSupport implements ServletRequestA
 			// load election and changes in electors/candidates if any
 			if (electionId != null && !electionId.isEmpty()) {
 				election = elections.getElection(Integer.parseInt(electionId));
-			} else {
-				election = new Election();
 			}
 			// unaffected electors filtering
 			electeurs = filterElecteurs(elections.getElecteurs(), election);
