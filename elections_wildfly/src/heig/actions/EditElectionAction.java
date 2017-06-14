@@ -31,17 +31,23 @@ public class EditElectionAction extends ActionSupport implements ServletRequestA
 
 	private HttpServletRequest request;
 
-	private String managePeople(boolean add, boolean elector, String peopleId, String electionId, IElections elections)
+	private String managePeople(boolean add, boolean elector, boolean all, String peopleId, String electionId, IElections elections)
 			throws NumberFormatException, PersistException {
 		Election election = elections.getElection(Integer.parseInt(electionId));
 		if (elector) {
-			Electeur electeur = elections.getElecteur(Integer.parseInt(peopleId));
-			if (add) {
-				election.getElecteurs().add(electeur);
+			if(!all){
+				Electeur electeur = elections.getElecteur(Integer.parseInt(peopleId));
+				if (add) {
+					election.getElecteurs().add(electeur);
+				}
+				else {
+					election.getElecteurs().remove(electeur);
+				}			
+			}else{
+				election.getElecteurs().clear();
+				election.getElecteurs().addAll(elections.getElecteurs());
 			}
-			else {
-				election.getElecteurs().remove(electeur);
-			}			
+			
 		}
 		else {
 			Candidat candidat = elections.getCandidat(Integer.parseInt(peopleId));
@@ -97,16 +103,21 @@ public class EditElectionAction extends ActionSupport implements ServletRequestA
 			String removeElecteurId = request.getParameter("removeElecteurId");
 			String addCandidatId = request.getParameter("addCandidatId");
 			String removeCandidatId = request.getParameter("removeCandidatId");
+			String addAllCandidats = request.getParameter("addAllCandidats");
+			String addAllElecteurs = request.getParameter("addAllElecteurs");
 			// persist electors/candidates changes if any
 			if (addElecteurId != null && !addElecteurId.isEmpty()) {
-				electionId = managePeople(true, true, addElecteurId, request.getParameter("addElecteurElectionId"), elections);
+				electionId = managePeople(true, true, false, addElecteurId, request.getParameter("addElecteurElectionId"), elections);
 			} else if (removeElecteurId != null && !removeElecteurId.isEmpty()) {
-				electionId = managePeople(false, true, removeElecteurId, request.getParameter("removeElecteurElectionId"), elections);
+				electionId = managePeople(false, true, false, removeElecteurId, request.getParameter("removeElecteurElectionId"), elections);
 			} else if (addCandidatId != null && !addCandidatId.isEmpty()) {
-				electionId = managePeople(true, false, addCandidatId, request.getParameter("addCandidatElectionId"), elections);
+				electionId = managePeople(true, false, false, addCandidatId, request.getParameter("addCandidatElectionId"), elections);
 			} else if (removeCandidatId != null && !removeCandidatId.isEmpty()) {
-				electionId = managePeople(false, false, removeCandidatId, request.getParameter("removeCandidatElectionId"), elections);
+				electionId = managePeople(false, false, false, removeCandidatId, request.getParameter("removeCandidatElectionId"), elections);
 			} 
+			else if (addAllElecteurs != null){
+				electionId = managePeople(true, true, true, "", addAllElecteurs, elections);
+			}
 			// load election and changes in electors/candidates if any
 			if (electionId != null && !electionId.isEmpty()) {
 				election = elections.getElection(Integer.parseInt(electionId));
@@ -116,7 +127,7 @@ public class EditElectionAction extends ActionSupport implements ServletRequestA
 			// unaffected candidates filtering
 			candidats = filterCandidats(elections.getCandidats(), election);
 		} catch (NumberFormatException | PersistException e) {
-			addActionError("Une erreur s'est produite pendant le chargement de l'élection avec id = " + electionId);
+			addActionError("Une erreur s'est produite pendant le chargement de l'ï¿½lection avec id = " + electionId);
 			e.printStackTrace();
 		}
 		return SUCCESS;

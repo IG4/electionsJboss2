@@ -27,6 +27,13 @@
 					<tr>
 						<th colspan="2">Affectation des électeurs</th>
 					</tr>
+					<tr><td><s:url action="edit-election" var="urlText" escapeAmp="false">
+											<s:param name="addAllElecteurs">
+												<s:property value="current" />
+											</s:param>
+										</s:url> 
+										<a href="<s:property value="urlText" />">Affecter tous</a>
+					</td></tr>
 					<tr>
 						<th>Electeurs affectés</th>
 						<th>Electeurs Disponibles</th>
