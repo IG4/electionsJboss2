@@ -100,6 +100,13 @@
 						<th>Candidats affectés</th>
 						<th>Candidats Disponibles</th>
 					</tr>
+					<tr><td><s:url action="edit-election" var="urlText" escapeAmp="false">
+											<s:param name="addAllCandidats">
+												<s:property value="current" />
+											</s:param>
+										</s:url> 
+										<a href="<s:property value="urlText" />">Affecter tous</a>
+					</td></tr>
 					<tr>
 						<td valign="top">
 							<table border="1">

@@ -50,12 +50,17 @@ public class EditElectionAction extends ActionSupport implements ServletRequestA
 			
 		}
 		else {
-			Candidat candidat = elections.getCandidat(Integer.parseInt(peopleId));
-			if (add) {
-				election.getCandidats().add(candidat);
-			}
-			else {
-				election.getCandidats().remove(candidat);
+			if(!all){
+				Candidat candidat = elections.getCandidat(Integer.parseInt(peopleId));
+				if (add) {
+					election.getCandidats().add(candidat);
+				}
+				else {
+					election.getCandidats().remove(candidat);
+				}
+			}else{
+				election.getCandidats().clear();
+				election.getCandidats().addAll(elections.getCandidats());
 			}
 		}
 		elections.save(election);
@@ -117,6 +122,9 @@ public class EditElectionAction extends ActionSupport implements ServletRequestA
 			} 
 			else if (addAllElecteurs != null){
 				electionId = managePeople(true, true, true, "", addAllElecteurs, elections);
+			}
+			else if (addAllCandidats != null){
+				electionId = managePeople(true, false, true, "", addAllCandidats, elections);
 			}
 			// load election and changes in electors/candidates if any
 			if (electionId != null && !electionId.isEmpty()) {
