@@ -13,15 +13,13 @@ import heig.metier.entite.Parti;
 import heig.metier.exceptions.PersistException;
 
 @Local
-public interface IElections {
+public interface IElections extends IElectionsRemote {
 
 	Boolean checkDate(Date toCheck);
 	
 	List<Candidat> getCandidats() throws PersistException;
 	
 	List<Electeur> getElecteurs() throws PersistException;
-	
-	List<Election> getElections() throws PersistException;
 	
 	List<Parti> getPartis() throws PersistException;
 	

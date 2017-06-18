@@ -180,5 +180,11 @@ public class Election implements Serializable, IPersistable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Election [id=" + id + ", nom=" + nom + ", code=" + code + ", debut=" + debut + ", fin=" + fin
+				+ ", electeurs=" + electeurs + ", candidats=" + candidats + ", votes=" + votes + "]";
+	}
+
 	
 }

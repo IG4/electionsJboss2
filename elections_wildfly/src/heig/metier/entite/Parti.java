@@ -117,4 +117,10 @@ public class Parti implements Serializable, IPersistable {
 
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Parti [id=" + id + ", nom=" + nom + ", ddf=" + ddf + ", localite=" + localite + "]";
+	}
+	
 }

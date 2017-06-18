@@ -97,17 +97,11 @@ public class Electeur implements Serializable, IPersistable {
 		this.elections = elections;
 	}
 
+
+
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Electeur [id=");
-		builder.append(id);
-		builder.append(", nom=");
-		builder.append(nom);
-		builder.append(", prenom=");
-		builder.append(prenom);
-		builder.append("]");
-		return builder.toString();
+		return "Electeur [id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", ddn=" + ddn + ", localite=" + localite + "]";
 	}
 
 	@Override

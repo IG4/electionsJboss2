@@ -100,4 +100,9 @@ public class Vote implements Serializable, IPersistable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Vote [id=" + id + ", candidat=" + candidat + ", electeur=" + electeur + "]";
+	}
+	
 }

@@ -22,7 +22,7 @@ import heig.metier.entite.Parti;
 import heig.metier.exceptions.PersistException;
 
 @Stateless
-public class ElectionsBean implements IElections {
+public class ElectionsBean implements IElections, IElectionsRemote {
 
 	@PersistenceContext
 	private EntityManager em;

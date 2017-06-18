@@ -100,9 +100,11 @@ public class Candidat implements Serializable, IPersistable {
 		this.elections = elections;
 	}
 
-	public String toString(){
-		return nom + " " + prenom;
-	}	
+	@Override
+	public String toString() {
+		return "Candidat [id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", ddn=" + ddn + ", localite=" + localite
+				+ ", parti=" + parti + "]";
+	}
 	
 	public String getNomComplet(){
 		return nom + " " + prenom;
@@ -139,5 +141,6 @@ public class Candidat implements Serializable, IPersistable {
 		
 		return true;
 	}
+	
 	
 }
