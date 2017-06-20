@@ -112,11 +112,11 @@ public class ElectionPieChartPanel extends JPanel {
 		Font newFont = new Font(font.getFontName(), Font.BOLD, font.getSize() + 15);
 		g.setFont(newFont);
 		if (type.equals(EPieChartType.CANDIDATE)) {
-			g.drawString("Résultats par candidat(s)", 20, font.getSize() + 25);
+			g.drawString("Résultats par candidat(s)", 20, newFont.getSize() + 25);
 		} else if (type.equals(EPieChartType.PARTI)) {
-			g.drawString("Résultats par parti(s)", 20, font.getSize() + 25);
+			g.drawString("Résultats par parti(s)", 20, newFont.getSize() + 25);
 		} else {
-			g.drawString("Type d'affichage non supporté", 20, font.getSize() + 25);
+			g.drawString("Type d'affichage non supporté", 20, newFont.getSize() + 25);
 		}
 		g.setFont(font);
 	}
@@ -127,6 +127,12 @@ public class ElectionPieChartPanel extends JPanel {
 		drawViewFrame(area, g);
 		drawPieChart(area, g);
 		drawElectionData(area, g);
+	}
+	
+	public void updateElection(Election election) {
+		this.election = election;
+		this.slices = getElectionSlices(election, type);
+		repaint();
 	}
 	
 	public List<PieSlice> getElectionSlices(Election election, EPieChartType type) {
