@@ -3,7 +3,7 @@
 <html>
 	<body>
 		<ul>
-			<li><a href="<s:url action="add-vote"/>"> Liste des votes</a></li>
+			<li id="titre">Liste des votes</li>
 			<li><a href="<s:url action="add-vote"/>"> Ajout d'un vote</a></li>
 			<li><a href="<s:url action="welcome"/>"> Retour au menu principal</a></li>
 		</ul>
