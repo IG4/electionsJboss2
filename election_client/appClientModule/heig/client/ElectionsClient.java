@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -19,6 +20,7 @@ import heig.metier.entite.Electeur;
 import heig.metier.entite.Election;
 import heig.metier.entite.Parti;
 import heig.metier.entite.Vote;
+import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElectionsRemote;
 
 public class ElectionsClient {
@@ -128,23 +130,25 @@ public class ElectionsClient {
 	}
 	
 	public static void main(String[] args) {
-//		try {
-//			Properties prop = new Properties();
-//			prop.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
-//			Context context = new InitialContext(prop);
-//			IElectionsRemote elections = (IElectionsRemote) context.lookup("ejb:elections_wildfly/ElectionsBean!heig.metier.session.IElectionsRemote");
+		try {
+			Properties prop = new Properties();
+			prop.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+			Context context = new InitialContext(prop);
+			Object obj = context.lookup("ejb:Elections/elections_wildfly/ElectionsBean!heig.metier.session.IElectionsRemote");
+			IElectionsRemote elections = (IElectionsRemote) obj;
 //			IElectionsRemote elections = lookupIElectionsRemote();
-//			List<Election> electionsList = elections.getElections();
-//			for (Election el : electionsList) {
-//				System.out.println("Election : " + el);
-//			}
-//		} catch (NamingException e) {
-//			e.printStackTrace();
-//		} catch (PersistException e) {
-//			e.printStackTrace();
-//		}
+			List<Election> electionsList = elections.getElectionsForClients();
+			new ElectionsFrame(electionsList);
+			for (Election el : electionsList) {
+				System.out.println("Election : " + el);
+			}
+		} catch (NamingException e) {
+			e.printStackTrace();
+		} catch (PersistException e) {
+			e.printStackTrace();
+		}
 //		new ElectionsFrame(electionsList);
-		new ElectionsFrame(getElections());
+		//new ElectionsFrame(getElections());
 	}
 	
     @SuppressWarnings("unused")
