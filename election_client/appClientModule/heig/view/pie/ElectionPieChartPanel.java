@@ -1,26 +1,25 @@
-package heig.client.view;
+package heig.view.pie;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
 
-import heig.client.view.metier.PieSlice;
-import heig.metier.entite.Candidat;
-import heig.metier.entite.Election;
-import heig.metier.entite.Parti;
-import heig.metier.entite.Vote;
+import heig.entite.Candidat;
+import heig.entite.Election;
+import heig.entite.Parti;
+import heig.entite.Vote;
+import heig.observer.IObserver;
 
-public class ElectionPieChartPanel extends JPanel {
-	/**
-	 * 
-	 */
+public class ElectionPieChartPanel extends JPanel implements IObserver {
+
 	private static final long serialVersionUID = 6976349614393757764L;
 	
 	private EPieChartType type;
@@ -59,6 +58,7 @@ public class ElectionPieChartPanel extends JPanel {
 			}
 			
 			for (PieSlice ps : slices) {
+				// avoid rounding problems
 				percentage = Double.valueOf((double)((ps.getVotes().size() * 100) / total));
 				percentage = (int) (percentage * 100);
 				percentage /= 100;
@@ -121,22 +121,9 @@ public class ElectionPieChartPanel extends JPanel {
 		g.setFont(font);
 	}
 	
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Rectangle area = getBounds();
-		drawViewFrame(area, g);
-		drawPieChart(area, g);
-		drawElectionData(area, g);
-	}
-	
-	public void updateElection(Election election) {
-		this.election = election;
-		this.slices = getElectionSlices(election, type);
-		repaint();
-	}
-	
 	public List<PieSlice> getElectionSlices(Election election, EPieChartType type) {
-		List<PieSlice> result = new ArrayList<>();
+		List<PieSlice> result = new ArrayList<PieSlice>();
+		
 		if (type.equals(EPieChartType.CANDIDATE)) {
 			Map<Candidat, List<Vote>> votes = new HashMap<Candidat, List<Vote>>();
 			List<Vote> tmp = null;
@@ -150,12 +137,9 @@ public class ElectionPieChartPanel extends JPanel {
 				tmp.add(v);
 				votes.put(v.getCandidat(), tmp);
 			}
-			Color colors[] = {Color.BLACK, Color.BLUE, Color.GREEN, Color.RED, Color.WHITE, Color.CYAN, Color.DARK_GRAY, Color.YELLOW, Color.MAGENTA, Color.ORANGE};
-			int count = 0;
 			for (List<Vote> entry : votes.values()) {
-				PieSlice ps = new PieSlice(colors[count % 10], entry);
+				PieSlice ps = new PieSlice(null, entry);
 				result.add(ps);
-				count++;
 			}
 		}
 		else if (type.equals(EPieChartType.PARTI)) {
@@ -171,14 +155,33 @@ public class ElectionPieChartPanel extends JPanel {
 				tmp.add(v);
 				votes.put(v.getCandidat().getParti(), tmp);
 			}
-			Color colors[] = {Color.BLACK, Color.BLUE, Color.GREEN, Color.RED, Color.WHITE, Color.CYAN, Color.DARK_GRAY, Color.YELLOW, Color.MAGENTA, Color.ORANGE};
-			int count = 0;
 			for (List<Vote> entry : votes.values()) {
-				PieSlice ps = new PieSlice(colors[count % 10], entry);
+				PieSlice ps = new PieSlice(null, entry);
 				result.add(ps);
-				count++;
 			}
 		}
+		Collections.sort(result);
+		Color colors[] = {Color.BLACK, Color.BLUE, Color.GREEN, Color.RED, Color.WHITE, Color.CYAN, Color.DARK_GRAY, Color.YELLOW, Color.MAGENTA, Color.ORANGE};
+		int count = 0;
+		for (PieSlice ps : result) {
+			ps.setColor(colors[count % 10]);
+			count++;
+		}
 		return result;
+	}
+
+	@Override
+	public void notify(Election election) {
+		this.election = election;
+		this.slices = getElectionSlices(election, type);
+		repaint();
+	}
+	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Rectangle area = getBounds();
+		drawViewFrame(area, g);
+		drawPieChart(area, g);
+		drawElectionData(area, g);
 	}
 }

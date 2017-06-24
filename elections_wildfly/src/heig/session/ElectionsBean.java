@@ -1,4 +1,4 @@
-package heig.metier.session;
+package heig.session;
 
 import java.sql.Date;
 import java.text.ParseException;
@@ -16,11 +16,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
-import heig.metier.entite.Candidat;
-import heig.metier.entite.Election;
-import heig.metier.entite.IPersistable;
-import heig.metier.entite.Parti;
-import heig.metier.exceptions.PersistException;
+import heig.entite.Candidat;
+import heig.entite.Election;
+import heig.entite.IPersistable;
+import heig.entite.Parti;
+import heig.exceptions.PersistException;
 
 @Stateless
 public class ElectionsBean implements IElections, IElectionsRemote {

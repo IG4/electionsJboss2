@@ -1,4 +1,4 @@
-package heig.client.view;
+package heig.view.interactive;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -13,19 +13,21 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import heig.metier.entite.Election;
+import heig.entite.Election;
+import heig.observer.IObservable;
+import heig.observer.IObserver;
 
-public class ElectionsSelectionPanel extends JPanel {
+public class ElectionsSelectionPanel extends JPanel implements IObserver {
 
 	private static final long serialVersionUID = -5637923506082741590L;
-
+	
 	private JComboBox<String> jcbElections;
 	
 	private JLabel lblCode, lblNom, lblCandidats, lblElecteurs, lblVotes, lblDebut, lblFin;
 	
-	private ElectionsFrame parent;
+	private IObservable parent;
 	
-	public ElectionsSelectionPanel(ElectionsFrame parent, Election current, List<Election> elections) {
+	public ElectionsSelectionPanel(IObservable parent, Election current, List<Election> elections) {
 		this.parent = parent;
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		displaySelectionComboBox(current, elections);
@@ -54,7 +56,7 @@ public class ElectionsSelectionPanel extends JPanel {
 		jcbElections.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ElectionsSelectionPanel.this.selectElection((String)ElectionsSelectionPanel.this.jcbElections.getSelectedItem());
+				ElectionsSelectionPanel.this.observe((String)ElectionsSelectionPanel.this.jcbElections.getSelectedItem());
 			}
 		});
 		add(jcbElections);
@@ -106,21 +108,21 @@ public class ElectionsSelectionPanel extends JPanel {
 		add(Box.createHorizontalGlue());
 		add(Box.createRigidArea(new Dimension(2, 0)));
 	}
-	
-	public void selectElection(String code) {
-		parent.selectElection(code);
-	}
-	
-	public void updateElection(Election election) {
+
+	@Override
+	public void notify(Election election) {
 		lblCode.setText(election.getCode());
 		lblNom.setText(election.getNom());
 		lblCandidats.setText(String.valueOf(election.getCandidats().size()));
 		lblElecteurs.setText(String.valueOf(election.getElecteurs().size()));
 		lblVotes.setText(String.valueOf(election.getVotes().size()));
-		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
 		lblDebut.setText(sdf.format(election.getDebut()));
 		lblFin.setText(sdf.format(election.getFin()));
 		repaint();
+	}
+	
+	public void observe(String code) {
+		parent.observe(code);
 	}
 }

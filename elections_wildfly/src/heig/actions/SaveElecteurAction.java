@@ -9,9 +9,9 @@ import org.apache.struts2.convention.annotation.Results;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import heig.metier.entite.Electeur;
-import heig.metier.exceptions.PersistException;
-import heig.metier.session.IElections;
+import heig.entite.Electeur;
+import heig.exceptions.PersistException;
+import heig.session.IElections;
 
 @Results({ @Result(name = "success", type = "chain", location = "list-electeurs"),
 		@Result(name = "input", location = "page.edit.electeurs", type = "tiles") })

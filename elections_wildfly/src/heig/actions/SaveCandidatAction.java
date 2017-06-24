@@ -1,5 +1,8 @@
 package heig.actions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -9,9 +12,10 @@ import org.apache.struts2.convention.annotation.Results;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import heig.metier.entite.Candidat;
-import heig.metier.exceptions.PersistException;
-import heig.metier.session.IElections;
+import heig.entite.Candidat;
+import heig.entite.NamedQueriesConstants;
+import heig.exceptions.PersistException;
+import heig.session.IElections;
 
 @Results({ @Result(name = "success", type = "chain", location = "list-candidats"),
 		@Result(name = "input", location = "page.edit.candidats", type = "tiles") })
@@ -24,7 +28,15 @@ public class SaveCandidatAction extends ActionSupport {
 		try {
 			Context ctx = new InitialContext();
 			IElections elections = (IElections) ctx.lookup(EJBNamingConstants.EJB_ELECTIONS);
-			elections.save(candidat);
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put(NamedQueriesConstants.CANDIDATE_BY_ID_QUERY_PARAM, candidat.getId());
+			Candidat toSave = (Candidat) elections.getPersistable(NamedQueriesConstants.CANDIDATE_BY_ID_QUERY_NAME, params);
+			// update data from form
+			toSave.setDdn(candidat.getDdn());
+			toSave.setLocalite(candidat.getLocalite());
+			toSave.setNom(candidat.getNom());
+			toSave.setPrenom(candidat.getPrenom());
+			elections.save(toSave);
 		} catch (PersistException e) {
 			addActionError("Une erreur de persistance est survenue : " + e.getMessage()); 
 			e.printStackTrace();

@@ -10,10 +10,10 @@ import org.apache.struts2.convention.annotation.Result;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import heig.metier.entite.NamedQueriesConstants;
-import heig.metier.entite.Parti;
-import heig.metier.exceptions.PersistException;
-import heig.metier.session.IElections;
+import heig.entite.NamedQueriesConstants;
+import heig.entite.Parti;
+import heig.exceptions.PersistException;
+import heig.session.IElections;
 
 
 @SuppressWarnings("serial")

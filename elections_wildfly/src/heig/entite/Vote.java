@@ -1,4 +1,4 @@
-package heig.metier.entite;
+package heig.entite;
 
 import java.io.Serializable;
 

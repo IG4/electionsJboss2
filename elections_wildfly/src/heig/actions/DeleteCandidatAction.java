@@ -11,9 +11,9 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import heig.metier.entite.Candidat;
-import heig.metier.exceptions.PersistException;
-import heig.metier.session.IElections;
+import heig.entite.Candidat;
+import heig.exceptions.PersistException;
+import heig.session.IElections;
 
 @Results({ @Result(name = "success", type = "chain", location = "list-candidats"),
 		@Result(name = "input", location = "page.list.candidats", type = "tiles") })

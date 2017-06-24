@@ -6,7 +6,7 @@ import org.apache.struts2.convention.annotation.Result;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import heig.metier.entite.Election;
+import heig.entite.Election;
 
 @SuppressWarnings("serial")
 @Result(name = "success", location = "page.add.elections", type = "tiles")

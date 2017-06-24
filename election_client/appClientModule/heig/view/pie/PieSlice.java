@@ -1,12 +1,12 @@
-package heig.client.view.metier;
+package heig.view.pie;
 
 import java.awt.Color;
 import java.util.List;
 
-import heig.metier.entite.Candidat;
-import heig.metier.entite.Vote;
+import heig.entite.Candidat;
+import heig.entite.Vote;
 
-public class PieSlice {
+public class PieSlice implements Comparable<PieSlice> {
 	
 	private Color color;
 	
@@ -22,6 +22,10 @@ public class PieSlice {
 		return color;
 	}
 
+	public void setColor(Color color) {
+		this.color = color;
+	}
+	
 	public List<Vote> getVotes() {
 		return votes;
 	}
@@ -59,5 +63,12 @@ public class PieSlice {
 		
 		return true;
 	}
-	
+
+	@Override
+	public int compareTo(PieSlice o) {
+		if (o.votes.size() == votes.size()) {
+			return o.votes.get(0).getCandidat().getNom().compareTo(votes.get(0).getCandidat().getNom());
+		}
+		return Integer.valueOf(o.votes.size()).compareTo(Integer.valueOf(votes.size()));
+	}	
 }

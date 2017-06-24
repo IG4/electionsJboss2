@@ -14,10 +14,10 @@ import org.apache.struts2.convention.annotation.Results;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import heig.metier.entite.Election;
-import heig.metier.entite.NamedQueriesConstants;
-import heig.metier.exceptions.PersistException;
-import heig.metier.session.IElections;
+import heig.entite.Election;
+import heig.entite.NamedQueriesConstants;
+import heig.exceptions.PersistException;
+import heig.session.IElections;
 
 @Results({ @Result(name = "success", type = "chain", location = "list-elections"),
 		@Result(name = "input", location = "page.edit.elections", type = "tiles") })

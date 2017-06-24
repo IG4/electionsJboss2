@@ -1,4 +1,4 @@
-package heig.client.view;
+package heig.view.pie;
 
 public enum EPieChartType {
 

@@ -1,4 +1,4 @@
-package heig.metier.session;
+package heig.session;
 
 import java.sql.Date;
 import java.text.ParseException;
@@ -12,13 +12,13 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
 
-import heig.metier.entite.Candidat;
-import heig.metier.entite.Electeur;
-import heig.metier.entite.Election;
-import heig.metier.entite.NamedQueriesConstants;
-import heig.metier.entite.Parti;
-import heig.metier.entite.Vote;
-import heig.metier.exceptions.PersistException;
+import heig.entite.Candidat;
+import heig.entite.Electeur;
+import heig.entite.Election;
+import heig.entite.NamedQueriesConstants;
+import heig.entite.Parti;
+import heig.entite.Vote;
+import heig.exceptions.PersistException;
 
 @Singleton
 @Startup

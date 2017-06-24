@@ -1,11 +1,11 @@
-package heig.metier.session;
+package heig.session;
 
 import java.sql.Date;
 
 import javax.ejb.Local;
 
-import heig.metier.entite.IPersistable;
-import heig.metier.exceptions.PersistException;
+import heig.entite.IPersistable;
+import heig.exceptions.PersistException;
 
 @Local
 public interface IElections extends IElectionsRemote {
