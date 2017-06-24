@@ -2,6 +2,8 @@ package heig.actions;
 
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -13,6 +15,7 @@ import org.apache.struts2.convention.annotation.Results;
 import com.opensymphony.xwork2.ActionSupport;
 
 import heig.metier.entite.Election;
+import heig.metier.entite.NamedQueriesConstants;
 import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
 
@@ -43,10 +46,12 @@ public class SaveElectionAction extends ActionSupport {
 	public String execute() {
 		try {
 			Context ctx = new InitialContext();
-			IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
+			IElections elections = (IElections) ctx.lookup(EJBNamingConstants.EJB_ELECTIONS);
 			Election toSave = election;
 			if (election.getId() != null) {// Problem to synchronize collections with the view => reload election before update or loose collections
-				toSave = elections.getElection(election.getId());
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put(NamedQueriesConstants.ELECTION_BY_ID_QUERY_PARAM, election.getId());
+				toSave = (Election) elections.getPersistable(NamedQueriesConstants.ELECTION_BY_ID_QUERY_NAME, params);
 				toSave.setCode(election.getCode());
 				toSave.setDebut(election.getDebut());
 				toSave.setFin(election.getFin());
@@ -82,7 +87,7 @@ public class SaveElectionAction extends ActionSupport {
 		}
 		try {
 			Context ctx = new InitialContext();
-			IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
+			IElections elections = (IElections) ctx.lookup(EJBNamingConstants.EJB_ELECTIONS);
 			if ((election.getDebut() == null) || 
 					isBeforeNow(election.getDebut(), new Date(Calendar.getInstance().getTimeInMillis())) || 
 					!elections.checkDate(election.getDebut())) {

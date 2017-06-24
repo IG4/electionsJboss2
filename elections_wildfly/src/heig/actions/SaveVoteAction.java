@@ -24,7 +24,7 @@ public class SaveVoteAction extends ActionSupport {
 		try {
 			Context ctx = new InitialContext();
 			vote = (Vote) ctx.lookup("Vote");
-			IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
+			IElections elections = (IElections) ctx.lookup(EJBNamingConstants.EJB_ELECTIONS);
 			elections.save(vote);
 			ctx.unbind("Vote");
 		} catch (PersistException e) {

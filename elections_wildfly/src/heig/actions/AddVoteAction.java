@@ -1,5 +1,8 @@
 package heig.actions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
@@ -11,7 +14,10 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import heig.metier.entite.Candidat;
+import heig.metier.entite.Electeur;
 import heig.metier.entite.Election;
+import heig.metier.entite.NamedQueriesConstants;
 import heig.metier.entite.Vote;
 import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
@@ -34,18 +40,20 @@ public class AddVoteAction extends ActionSupport implements ServletRequestAware 
 			vote = new Vote();
 			ctx.bind("Vote", vote);
 		}
-		
-		IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
+		IElections elections = (IElections) ctx.lookup(EJBNamingConstants.EJB_ELECTIONS);
 		String electionId = request.getParameter("electionId");
 		try {
 			String addElecteurId = request.getParameter("addElecteurId");
 			String addCandidatId = request.getParameter("addCandidatId");
 			String removeVoteId = request.getParameter("removeVoteId");
+			Map<String, Object> params = new HashMap<String, Object>();
 			if (addElecteurId != null && !addElecteurId.isEmpty()) {
-				vote.setElecteur(elections.getElecteur(Integer.parseInt(addElecteurId)));
+				params.put(NamedQueriesConstants.ELECTOR_BY_ID_QUERY_PARAM, Integer.parseInt(addElecteurId));
+				vote.setElecteur((Electeur) elections.getPersistable(NamedQueriesConstants.ELECTOR_BY_ID_QUERY_NAME, params));
 				electionId = request.getParameter("addElecteurElectionId");
 			} else if (addCandidatId != null && !addCandidatId.isEmpty()) {
-				vote.setCandidat(elections.getCandidat(Integer.parseInt(addCandidatId)));
+				params.put(NamedQueriesConstants.CANDIDATE_BY_ID_QUERY_PARAM, Integer.parseInt(addCandidatId));
+				vote.setCandidat((Candidat) elections.getPersistable(NamedQueriesConstants.CANDIDATE_BY_ID_QUERY_NAME, params));
 				electionId = request.getParameter("addCandidatElectionId");
 			} else if (removeVoteId != null && !removeVoteId.isEmpty()) {
 				elections.delete(Vote.class, Integer.parseInt(removeVoteId));
@@ -55,7 +63,9 @@ public class AddVoteAction extends ActionSupport implements ServletRequestAware 
 			if (electionId == null || "".equals(electionId) || " ".equals(electionId)) {
 				addActionError("Election non trouvée");
 			} else {
-				election = elections.getElection(Integer.parseInt(electionId));
+				params = new HashMap<String, Object>();
+				params.put(NamedQueriesConstants.ELECTION_BY_ID_QUERY_PARAM, Integer.parseInt(electionId));
+				election = (Election) elections.getPersistable(NamedQueriesConstants.ELECTION_BY_ID_QUERY_NAME, params);
 				if (vote.getElecteur() != null) {
 					election.getElecteurs().remove(vote.getElecteur());
 				}

@@ -11,6 +11,7 @@ import org.apache.struts2.convention.annotation.Result;
 import com.opensymphony.xwork2.ActionSupport;
 
 import heig.metier.entite.Candidat;
+import heig.metier.entite.NamedQueriesConstants;
 import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
 
@@ -32,8 +33,8 @@ public class ListCandidatsAction extends ActionSupport {
 	public String execute() {
 		try {
 			Context ctx = new InitialContext();
-			IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
-			candidats = elections.getCandidats();
+			IElections elections = (IElections) ctx.lookup(EJBNamingConstants.EJB_ELECTIONS);
+			candidats = elections.getPersitableList(NamedQueriesConstants.CANDIDATE_LIST_QUERY_NAME);
 		} catch (NamingException e1) {
 			e1.printStackTrace();
 		}

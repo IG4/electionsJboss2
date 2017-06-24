@@ -23,7 +23,7 @@ public class SavePartiAction extends ActionSupport {
 	public String execute() {
 		try {
 			Context ctx = new InitialContext();
-			IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
+			IElections elections = (IElections) ctx.lookup(EJBNamingConstants.EJB_ELECTIONS);
 			elections.save(parti);
 		} catch (PersistException e) {
 			e.printStackTrace();
@@ -52,7 +52,7 @@ public class SavePartiAction extends ActionSupport {
 		
 		try {
 			Context ctx = new InitialContext();
-			IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
+			IElections elections = (IElections) ctx.lookup(EJBNamingConstants.EJB_ELECTIONS);
 			if (!elections.checkDate(parti.getDdf())) {
 				addActionError(getText("date.formatincorrect"));
 			}

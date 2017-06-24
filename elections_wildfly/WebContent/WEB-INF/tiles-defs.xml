@@ -106,12 +106,6 @@
 	</definition>
 	
 	<!-- Pages pour gérer les votes -->
-	<definition name="page.welcome.votes" extends="base.definition">
-		<put-attribute name="title" value="Votes" />
-		<put-attribute name="navigation" value="/navigation-votes.jsp" />
-		<put-attribute name="body" value="/welcome-votes.jsp" />
-	</definition>
-	
 	<definition name="page.add.vote" extends="base.definition">
 		<put-attribute name="title" value="ajout votes" />
 		<put-attribute name="navigation" value="/navigation-votes.jsp" />
@@ -123,7 +117,5 @@
 		<put-attribute name="navigation" value="/navigation-votes.jsp" />
 		<put-attribute name="body" value="/add-vote.jsp" />
 	</definition>
-	
-	
-	
+
 </tiles-definitions>

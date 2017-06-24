@@ -1,5 +1,8 @@
 package heig.actions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -11,6 +14,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import com.opensymphony.xwork2.ActionSupport;
 
 import heig.metier.entite.Electeur;
+import heig.metier.entite.NamedQueriesConstants;
 import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
 
@@ -22,13 +26,15 @@ public class EditElecteurAction extends ActionSupport implements ServletRequestA
 
 	public String execute() throws NamingException {
 		Context ctx = new InitialContext();
-		IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
+		IElections elections = (IElections) ctx.lookup(EJBNamingConstants.EJB_ELECTIONS);
 		String electeurId = request.getParameter("electeurId");
 		if (electeurId == null || "".equals(electeurId) || " ".equals(electeurId)) {
 			electeur = new Electeur();
 		} else {
 			try {
-				electeur = elections.getElecteur(Integer.parseInt(electeurId));
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put(NamedQueriesConstants.ELECTOR_BY_ID_QUERY_PARAM, Integer.parseInt(electeurId));
+				electeur = (Electeur) elections.getPersistable(NamedQueriesConstants.ELECTOR_BY_ID_QUERY_NAME, params);
 			} catch (NumberFormatException | PersistException e) {
 				addActionError("Une erreur s'est produite pendant le chargement de l'électeur avec id = " + electeurId);
 				e.printStackTrace();

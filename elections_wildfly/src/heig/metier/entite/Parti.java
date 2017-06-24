@@ -10,9 +10,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(query = NamedQueriesConstants.PARTI_LIST_QUERY, name = NamedQueriesConstants.PARTI_LIST_QUERY_NAME),
+	@NamedQuery(query = NamedQueriesConstants.PARTI_BY_NAME_QUERY, name = NamedQueriesConstants.PARTI_BY_NAME_QUERY_NAME),
+	@NamedQuery(query = NamedQueriesConstants.PARTI_BY_ID_QUERY, name = NamedQueriesConstants.PARTI_BY_ID_QUERY_NAME)
+})
 public class Parti implements Serializable, IPersistable {
 	private static final long serialVersionUID = 1L;
 	@Id @GeneratedValue
@@ -80,13 +87,18 @@ public class Parti implements Serializable, IPersistable {
 	}
 
 	public void addCandidat(Candidat c) {
-		c.setParti(this);
-		getCandidats().add(c);
+		if (!getCandidats().contains(c)) {
+			getCandidats().add(c);
+			c.setParti(this);
+		}
+
 	}
 	
 	public void removeCandidat(Candidat c) {
-		getCandidats().remove(c);
-		c.setParti(null);
+		if (getCandidats().contains(c)) {
+			getCandidats().remove(c);
+			c.setParti(null);
+		}
 	}
 	
 	@Override

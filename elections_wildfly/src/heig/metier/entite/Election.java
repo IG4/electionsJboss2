@@ -11,9 +11,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(query = NamedQueriesConstants.ELECTION_LIST_QUERY, name = NamedQueriesConstants.ELECTION_LIST_QUERY_NAME),
+	@NamedQuery(query = NamedQueriesConstants.ELECTION_BY_ID_QUERY, name = NamedQueriesConstants.ELECTION_BY_ID_QUERY_NAME)
+})
 public class Election implements Serializable, IPersistable {
 	private static final long serialVersionUID = 1L;
 	

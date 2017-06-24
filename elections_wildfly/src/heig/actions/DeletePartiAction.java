@@ -24,7 +24,7 @@ public class DeletePartiAction extends ActionSupport implements ServletRequestAw
 	
 	public String execute() throws NamingException {
 		Context ctx = new InitialContext();
-		IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
+		IElections elections = (IElections) ctx.lookup(EJBNamingConstants.EJB_ELECTIONS);
 		String partiId = request.getParameter("partiId");
 		if (partiId == null || "".equals(partiId) || " ".equals(partiId)) {
 			addActionError("partiId invalide : " + partiId);

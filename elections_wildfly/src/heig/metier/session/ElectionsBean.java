@@ -5,17 +5,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 
 import heig.metier.entite.Candidat;
-import heig.metier.entite.Electeur;
 import heig.metier.entite.Election;
 import heig.metier.entite.IPersistable;
 import heig.metier.entite.Parti;
@@ -27,209 +28,34 @@ public class ElectionsBean implements IElections, IElectionsRemote {
 	@PersistenceContext
 	private EntityManager em;
 
-	/**
-	 * Loads from database given {@code clazz} instance with matching {@code id}.
-	 * 
-	 * @param clazz The instance class to load
-	 * @param id The id to look for
-	 * @return The matching instance
-	 * @throws PersistException if nothing found
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private IPersistable getPersistable(Class clazz, Integer id) throws PersistException {
-		try {
-			IPersistable result = (IPersistable) em.find(clazz, id);
-			if (result == null) {
-				throw new PersistException(String.format(clazz.getName() + " with id = %s not found", id));
+	private void loadLazyElements(IPersistable p) {
+		if (p instanceof Candidat) {
+			if (((Candidat) p).getParti() != null) {
+				((Candidat) p).getParti().getNom();
 			}
-			return result;
 		}
-		catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new PersistenceException("getPersistable()", e);
+		else if (p instanceof Election) {
+			((Election) p).getCandidats().size();
+			((Election) p).getElecteurs().size();
+			((Election) p).getVotes().size();
+		}
+		else if (p instanceof Parti) {
+			((Parti) p).getCandidats().size();
 		}
 	}
 	
-	@PostConstruct
-	public void init() {
-		/**
-		 * Ppoulate db with some ppl
-		 */
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		
-		try {
-			save(new Electeur(null, "Doe", "John", new Date(sdf.parse("12/05/1982").getTime()), "Lausanne"));
-			save(new Electeur(null, "Doe", "Jane", new Date(sdf.parse("14/07/1984").getTime()), "Lausanne"));
-			save(new Electeur(null, "Hendrix", "Jimmy", new Date(sdf.parse("07/11/1944").getTime()), "Montreux"));
-			save(new Electeur(null, "Mercury", "Freddy", new Date(sdf.parse("07/11/1944").getTime()), "Montreux"));
-			save(new Electeur(null, "Marley", "Bob", new Date(sdf.parse("18/04/1947").getTime()), "Zürich"));
-			save(new Electeur(null, "Goldmann", "Jean-Jacques", new Date(sdf.parse("09/12/1953").getTime()), "Genève"));
-			
-			save(new Candidat(null, "Leuthard", "Doris", new Date(sdf.parse("21/04/1969").getTime()), "Araau"));
-			save(new Candidat(null, "Broulis", "Pascal", new Date(sdf.parse("03/10/1967").getTime()), "Lausanne"));
-			save(new Candidat(null, "Morand", "Toto", new Date(sdf.parse("23/09/1957").getTime()), "Lausanne"));
-			save(new Candidat(null, "Brélaz", "Daniel", new Date(sdf.parse("14/02/1962").getTime()), "Lausanne"));
-			save(new Candidat(null, "Germond", "Florence", new Date(sdf.parse("14/02/1962").getTime()), "Lausanne"));
-			
-			Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.DAY_OF_YEAR, 10);
-			
-			Election election = new Election(null, "Test", "MD45", new Date(new java.util.Date().getTime()), new Date(cal.getTimeInMillis()));
-			List<Candidat> candidatsDispo = getCandidats();
-			election.getCandidats().add(candidatsDispo.get(0));
-			election.getCandidats().add(candidatsDispo.get(1));
-			List<Electeur> electeursDispo = getElecteurs();
-			election.getElecteurs().add(electeursDispo.get(0));
-			election.getElecteurs().add(electeursDispo.get(1));
-			save(election);
-			
-			candidatsDispo = getCandidats();
-			Parti parti = new Parti(null, "PDC", new Date(sdf.parse("12/09/1902").getTime()), "Bern");
-			parti.addCandidat(candidatsDispo.get(0));
-			save(parti);
-			
-			parti = new Parti(null, "PLR", new Date(sdf.parse("07/02/1904").getTime()), "Basel");
-			parti.addCandidat(candidatsDispo.get(1));
-			save(parti);
-			
-			parti = new Parti(null, "Parti de rien", new Date(sdf.parse("05/03/2012").getTime()), "Lausanne");
-			parti.addCandidat(candidatsDispo.get(2));
-			save(parti);
-		} catch (PersistException | ParseException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Candidat> getCandidats() throws PersistException {
-		try {
-			return em.createQuery("Select c FROM Candidat c").getResultList();
-		}
-		catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new PersistenceException("getCandidats()", e);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Electeur> getElecteurs() throws PersistException {
-		try {
-			return em.createQuery("Select e FROM Electeur e").getResultList();
-		}
-		catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new PersistenceException("getElecteurs()", e);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Election> getElections() throws PersistException {
-		try {
-			return em.createQuery("Select e FROM Election e").getResultList();
-		}
-		catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new PersistenceException("getElections()", e);
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Parti> getPartis() throws PersistException {
-		try {
-			return em.createQuery("Select p FROM Parti p").getResultList();
-		}
-		catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new PersistenceException("getPartis()", e);
-		}
-	}
-
-	@Override
-	public Candidat getCandidat(Integer id) throws PersistException {
-		Candidat result = (Candidat) getPersistable(Candidat.class, id);
-		if (result.getParti() != null) {
-			System.out.println("candidat avec parti : " + result.getParti() != null ? result.getParti().getNom() : "null");
-		}
-		return result;
-	}
-
-	@Override
-	public Electeur getElecteur(Integer id) throws PersistException {
-		return (Electeur) getPersistable(Electeur.class, id);
-	}
-	
-	@Override
-	public Election getElection(Integer id) throws PersistException {
-		Election result = (Election) getPersistable(Election.class, id);
-		System.out.println("election avec electeurs : " + result.getElecteurs().size());
-		System.out.println("election avec candidats : " + result.getCandidats().size());
-		System.out.println("election avec votes : " + result.getVotes().size());
-		return result;
-	}
-	
-	@Override
-	public Parti getParti(Integer id) throws PersistException {
-		Parti result = (Parti) getPersistable(Parti.class, id);
-		System.out.println("parti avec candidats : " + result.getCandidats().size());
-		return result;
-	}
-
-	@TransactionAttribute(value=TransactionAttributeType.REQUIRES_NEW)
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public void delete(Class clazz, Integer id) throws PersistException {
-		try {
-			if (id != null) {
-				em.remove(em.find(clazz, id));
-			}
-			else {
-				throw new PersistException(clazz.getName() + " avec id invalide : null");
-			}
-		}
-		catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new PersistenceException("delete() : " + clazz.getName() + " avec id = " + String.valueOf(id), e);
-		}
-	}
-
-	@TransactionAttribute(value=TransactionAttributeType.REQUIRES_NEW)
-	@Override
-	public void save(IPersistable toSave) throws PersistException {
-		try {
-			if (toSave == null) {
-				throw new PersistException(toSave + " invalide : null");
-			}
-
-			if (toSave.getId() != null) {
-				em.merge(toSave);
-			}
-			else {
-				em.persist(toSave);
-			}
-		}
-		catch (PersistenceException e) {
-			e.printStackTrace();
-			throw new PersistenceException("save()", e);
-		}
-	}
-
 	@Override
 	public Boolean checkDate(Date toCheck) {
 		if (toCheck == null) {
 			return Boolean.FALSE;
 		}
 		Boolean result = Boolean.TRUE;
+		// Verify Date object is correct
 		Calendar cal = Calendar.getInstance();
-		System.out.println(cal.get(Calendar.YEAR));
 		cal.setLenient(false);
 		try {
 			cal.setTime(toCheck);
 		    cal.getTime();
-		    
 		}
 		catch (Exception e) {
 		  result = Boolean.FALSE;
@@ -249,5 +75,63 @@ public class ElectionsBean implements IElections, IElectionsRemote {
 			}
 		}
 		return result;
+	}
+	
+	@Override
+	public IPersistable getPersistable(String queryName, Map<String, Object> params) throws PersistException {
+		Query query = em.createNamedQuery(queryName);
+		for (Entry<String, Object> entry : params.entrySet()) {
+			query.setParameter(entry.getKey(), entry.getValue());
+		}
+		IPersistable result = (IPersistable) query.getSingleResult();
+		loadLazyElements(result);
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> List<T> getPersitableList(String queryName) throws PersistException {
+		Query query = em.createNamedQuery(queryName);
+		List<T> result = (List<T>)(List<?>) query.getResultList();
+		for (T el : result) {
+			loadLazyElements((IPersistable) el);
+		}
+		return result;
+	}
+	
+	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@TransactionAttribute(value=TransactionAttributeType.REQUIRES_NEW)
+	public void delete(Class clazz, Integer id) throws PersistException {
+		try {
+			if (id != null) {
+				em.remove(em.find(clazz, id));
+			}
+			else {
+				throw new PersistException(clazz.getName() + " avec id invalide : null");
+			}
+		}
+		catch (PersistenceException e) {
+			throw new PersistException("delete() : " + clazz.getName() + " avec id = " + String.valueOf(id), e);
+		}
+	}
+
+	@Override
+	@TransactionAttribute(value=TransactionAttributeType.REQUIRES_NEW)
+	public void save(IPersistable toSave) throws PersistException {
+		try {
+			if (toSave == null) {
+				throw new PersistException("Paramètre invalide : null");
+			}
+			if (toSave.getId() != null) {
+				em.merge(toSave);
+			}
+			else {
+				em.persist(toSave);
+			}
+		}
+		catch (PersistenceException e) {
+			throw new PersistException("save()", e);
+		}
 	}
 }

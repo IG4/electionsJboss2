@@ -1,7 +1,9 @@
 package heig.actions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -14,6 +16,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import com.opensymphony.xwork2.ActionSupport;
 
 import heig.metier.entite.Candidat;
+import heig.metier.entite.NamedQueriesConstants;
 import heig.metier.entite.Parti;
 import heig.metier.exceptions.PersistException;
 import heig.metier.session.IElections;
@@ -27,15 +30,21 @@ public class EditPartiAction extends ActionSupport implements ServletRequestAwar
 
 	private String manageCandidats(boolean add, String candidatId, String partiId, IElections elections)
 			throws NumberFormatException, PersistException {
-		Parti parti = elections.getParti(Integer.parseInt(partiId));
-		Candidat candidat = elections.getCandidat(Integer.parseInt(candidatId));
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put(NamedQueriesConstants.PARTI_BY_ID_QUERY_PARAM, Integer.parseInt(partiId));
+		Parti parti = (Parti) elections.getPersistable(NamedQueriesConstants.PARTI_BY_ID_QUERY_NAME, params);
+		
+		params = new HashMap<String, Object>();
+		params.put(NamedQueriesConstants.CANDIDATE_BY_ID_QUERY_PARAM, Integer.parseInt(candidatId));
+		Candidat candidat = (Candidat) elections.getPersistable(NamedQueriesConstants.CANDIDATE_BY_ID_QUERY_NAME, params);
 		if (add) {
 			parti.addCandidat(candidat);
 		}
 		else {
 			parti.removeCandidat(candidat);
 			elections.save(candidat);			
-		}			
+		}
 		elections.save(parti);
 		return partiId;
 	}
@@ -52,7 +61,7 @@ public class EditPartiAction extends ActionSupport implements ServletRequestAwar
 	
 	public String execute() throws NamingException {
 		Context ctx = new InitialContext();
-		IElections elections = (IElections) ctx.lookup("java:global/elections_wildfly/ElectionsBean!heig.metier.session.IElections");
+		IElections elections = (IElections) ctx.lookup(EJBNamingConstants.EJB_ELECTIONS);
 		String partiId = request.getParameter("partiId");
 		try {
 			String addCandidatId = request.getParameter("addCandidatId");
@@ -62,9 +71,11 @@ public class EditPartiAction extends ActionSupport implements ServletRequestAwar
 			} else if (removeCandidatId != null && !removeCandidatId.isEmpty()) {
 				partiId = manageCandidats(false, removeCandidatId, request.getParameter("removeCandidatPartiId"), elections);
 			}
-			parti = elections.getParti(Integer.parseInt(partiId));
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put(NamedQueriesConstants.PARTI_BY_ID_QUERY_PARAM, Integer.parseInt(partiId));
+			parti = (Parti) elections.getPersistable(NamedQueriesConstants.PARTI_BY_ID_QUERY_NAME, params);
 			// unaffected candidates filtering
-			candidats = filterCandidats(elections.getCandidats(), parti);
+			candidats = filterCandidats(elections.getPersitableList(NamedQueriesConstants.CANDIDATE_LIST_QUERY_NAME), parti);
 		} catch (NumberFormatException | PersistException e) {
 			addActionError("Une erreur s'est produite pendant le chargement du parti avec id = " + partiId);
 			e.printStackTrace();

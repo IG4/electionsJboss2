@@ -29,6 +29,14 @@ public class Vote implements Serializable, IPersistable {
 		super();
 	}
 
+	public Vote(Integer id, Candidat candidat, Electeur electeur, Election election) {
+		super();
+		this.id = id;
+		this.candidat = candidat;
+		this.electeur = electeur;
+		this.election = election;
+	}
+
 	public Vote(Integer id, Candidat candidat, Electeur electeur) {
 		super();
 		this.id = id;
