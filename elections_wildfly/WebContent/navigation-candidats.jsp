@@ -3,7 +3,7 @@
 <html>
 	<body>
 		<ul>
-			<li><a href="<s:url action="list-candidats"/>"> Liste des candidats</a></li>
+			<li id="titre">Liste des candidats</li>
 			<li><a href="<s:url action="edit-candidat"/>"> Ajout d'un candidat</a></li>
 			<li><a href="<s:url action="welcome"/>"> Retour au menu principal</a></li>
 		</ul>

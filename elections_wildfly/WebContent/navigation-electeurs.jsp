@@ -3,7 +3,7 @@
 <html>
 	<body>
 		<ul>
-			<li><a href="<s:url action="list-electeurs"/>"> Liste des électeurs</a></li>
+			<li id="titre">Liste des électeurs</li>
 			<li><a href="<s:url action="edit-electeur"/>"> Ajout d'un électeur</a></li>
 			<li><a href="<s:url action="welcome"/>"> Retour au menu principal</a></li>
 		</ul>

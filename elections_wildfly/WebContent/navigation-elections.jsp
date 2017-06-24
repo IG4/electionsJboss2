@@ -3,7 +3,7 @@
 <html>
 	<body>
 		<ul>
-			<li><a href="<s:url action="list-elections"/>"> Liste des élections</a></li>
+			<li id="titre">Liste des élections</li>
 			<li><a href="<s:url action="add-election"/>"> Ajout d'une élection</a></li>
 			<li><a href="<s:url action="welcome"/>"> Retour au menu principal</a></li>
 		</ul>

@@ -3,7 +3,7 @@
 <html>
 	<body>
 		<ul>
-			<li><a href="<s:url action="list-partis"/>"> Liste des partis</a></li>
+			<li id="titre">Liste des partis</li>
 			<li><a href="<s:url action="add-parti"/>"> Ajout d'un parti</a></li>
 			<li><a href="<s:url action="welcome"/>"> Retour au menu principal</a></li>
 		</ul>

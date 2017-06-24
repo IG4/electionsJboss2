@@ -1,2 +1,9 @@
+<%@ page contentType="text/html; charset=ISO-8859-1"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 
-Bienvenue dans l'application de gestion des élections.
+		<article>
+			Bienvenue dans l'application de gestion des élections.
+			<img src="images/vote.jpeg" alt="vote_logo">
+		</article>
+
+			
