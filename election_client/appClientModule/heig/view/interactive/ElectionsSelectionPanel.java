@@ -93,7 +93,7 @@ public class ElectionsSelectionPanel extends JPanel implements IObserver {
 		lblVotes = new JLabel(String.valueOf(current.getVotes().size()));
 		add(lblVotes);
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		add(Box.createRigidArea(new Dimension(40, 10)));
 		add(new JLabel("Date de début : "));
 		add(Box.createRigidArea(new Dimension(2, 0)));
